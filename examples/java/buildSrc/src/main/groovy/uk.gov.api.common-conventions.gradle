@@ -1,0 +1,33 @@
+plugins {
+  id 'java'
+  id 'jacoco'
+}
+
+repositories {
+  mavenCentral()
+}
+
+group 'uk.gov.api'
+version '0.1-SNAPSHOT'
+
+java {
+  withSourcesJar()
+  withJavadocJar()
+}
+
+test {
+  useJUnitPlatform()
+  systemProperties([
+    // Configuration parameters to execute top-level classes in parallel but methods in same thread
+    'junit.jupiter.execution.parallel.enabled': 'true',
+    'junit.jupiter.execution.parallel.mode.default': 'same_thread',
+    'junit.jupiter.execution.parallel.mode.classes.default': 'concurrent',
+  ])
+}
+
+jacocoTestReport {
+  reports {
+    xml.enabled true
+  }
+}
+test.finalizedBy jacocoTestReport

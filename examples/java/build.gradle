@@ -1,0 +1,34 @@
+plugins {
+  id 'com.diffplug.spotless' version '6.0.0'
+  id 'uk.gov.api.common-conventions'
+}
+
+repositories {
+  mavenCentral()
+}
+
+allprojects {
+  apply plugin: 'com.diffplug.spotless'
+
+  java {
+    toolchain {
+      languageVersion.set(JavaLanguageVersion.of(17))
+    }
+  }
+
+  spotless {
+    java {
+      target 'src/**/*.java'
+      googleJavaFormat('1.13.0')
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+    groovyGradle {
+      target '**/*.gradle'
+      greclipse()
+      indentWithSpaces(2)
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+  }
+}
