@@ -1,0 +1,11 @@
+plugins {
+  id 'uk.gov.api.common-conventions'
+  id 'org.springframework.boot'
+  id 'io.spring.dependency-management'
+}
+
+configurations {
+  all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+  testImplementation.exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+  testRuntimeOnly.exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+}
