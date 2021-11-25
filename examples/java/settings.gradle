@@ -1,1 +1,2 @@
 rootProject.name = 'federated-api-discovery'
+include 'spring-boot'
