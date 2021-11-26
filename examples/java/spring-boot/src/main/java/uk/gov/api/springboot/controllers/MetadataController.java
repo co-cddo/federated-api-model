@@ -17,7 +17,7 @@ public class MetadataController {
     this.service = service;
   }
 
-  @GetMapping
+  @GetMapping(produces = "application/vnd.uk.gov.api.v1alpha+json")
   public List<ApiMetadata> retrieveAll() {
     return service.retrieveAll();
   }
