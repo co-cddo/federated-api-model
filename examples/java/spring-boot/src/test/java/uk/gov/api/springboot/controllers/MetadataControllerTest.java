@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.springboot.models.metadata.ApiMetadata;
+import uk.gov.api.springboot.models.metadata.BulkApiMetadataResponse;
 import uk.gov.api.springboot.services.MetadataService;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,9 +28,9 @@ class MetadataControllerTest {
     void returnsListOfApiMetadata(@Mock List<ApiMetadata> apiMetadata) {
       when(service.retrieveAll()).thenReturn(apiMetadata);
 
-      List<ApiMetadata> actual = controller.retrieveAll();
+      BulkApiMetadataResponse actual = controller.retrieveAll();
 
-      assertThat(actual).isEqualTo(apiMetadata);
+      assertThat(actual.getApis()).isEqualTo(apiMetadata);
     }
   }
 }

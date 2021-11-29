@@ -50,7 +50,8 @@ class MetadataControllerIntegrationTest {
       mockMvc
           .perform(get("/apis"))
           .andExpect(
-              jsonPath("[*].api-version").value(Matchers.containsInAnyOrder("alpha 1", "alpha 2")));
+              jsonPath("$.apis[*].api-version")
+                  .value(Matchers.containsInAnyOrder("alpha 1", "alpha 2")));
     }
 
     @Test
