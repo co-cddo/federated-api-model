@@ -1,0 +1,23 @@
+{
+  "name": "federated-api-model-schemas",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "ajv compile -s 'v*/*.json' --strict-schema=false -c ajv-formats"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphagov/federated-api-model.git"
+  },
+  "author": "",
+  "license": "OGL-UK-3.0",
+  "bugs": {
+    "url": "https://github.com/alphagov/federated-api-model/issues"
+  },
+  "homepage": "https://github.com/alphagov/federated-api-model#readme",
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^2.1.1"
+  },
+  "private": true
+}
