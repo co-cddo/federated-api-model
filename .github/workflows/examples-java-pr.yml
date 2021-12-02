@@ -5,6 +5,7 @@ on:
     paths:
       - "examples/java/**"
       - ".github/workflows/examples-java-pr.yml"
+      - "schemas/**"
 
 permissions:
   contents: read

@@ -3,7 +3,9 @@ package uk.gov.api.springboot.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import java.util.List;
+import models.metadata.ApiMetadata;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.springboot.daos.MetadataDao;
-import uk.gov.api.springboot.models.metadata.ApiMetadata;
 import uk.gov.api.springboot.repositories.MetadataRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,8 +26,8 @@ class MetadataServiceTest {
     @Mock private MetadataRepository repository;
 
     @Test
-    void returnsListOfApiMetadata(@Mock MetadataDao dao) {
-      when(repository.findAll()).thenReturn(List.of(dao));
+    void returnsListOfApiMetadata() {
+      when(repository.findAll()).thenReturn(List.of(getMetadataDao()));
 
       List<ApiMetadata> actual = service.retrieveAll();
 
@@ -35,29 +36,22 @@ class MetadataServiceTest {
 
     @Test
     void mapsApiVersion() {
-      MetadataDao dao1 = new MetadataDao();
-      dao1.setApiVersion("version 1");
-      MetadataDao dao2 = new MetadataDao();
-      dao2.setApiVersion("version 2");
-      MetadataDao dao3 = new MetadataDao();
-      dao3.setApiVersion("version 3");
-      when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
+      MetadataDao dao = getMetadataDao();
+      when(repository.findAll()).thenReturn(List.of(dao));
 
       List<ApiMetadata> actual = service.retrieveAll();
 
-      assertThat(actual).hasSize(3);
-      assertApiVersion(actual.get(0), "version 1");
-      assertApiVersion(actual.get(1), "version 2");
-      assertApiVersion(actual.get(2), "version 3");
+      assertThat(actual).hasSize(1);
+      assertApiVersion(actual.get(0), ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
     }
 
     @Test
     void mapsName() {
-      MetadataDao dao1 = new MetadataDao();
+      MetadataDao dao1 = getMetadataDao();
       dao1.setName("name 1");
-      MetadataDao dao2 = new MetadataDao();
+      MetadataDao dao2 = getMetadataDao();
       dao2.setName("name 2");
-      MetadataDao dao3 = new MetadataDao();
+      MetadataDao dao3 = getMetadataDao();
       dao3.setName("name 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -71,11 +65,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsDescription() {
-      MetadataDao dao1 = new MetadataDao();
+      MetadataDao dao1 = getMetadataDao();
       dao1.setDescription("description 1");
-      MetadataDao dao2 = new MetadataDao();
+      MetadataDao dao2 = getMetadataDao();
       dao2.setDescription("description 2");
-      MetadataDao dao3 = new MetadataDao();
+      MetadataDao dao3 = getMetadataDao();
       dao3.setDescription("description 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -89,29 +83,31 @@ class MetadataServiceTest {
 
     @Test
     void mapsUrl() {
-      MetadataDao dao1 = new MetadataDao();
-      dao1.setUrl("url 1");
-      MetadataDao dao2 = new MetadataDao();
-      dao2.setUrl("url 2");
-      MetadataDao dao3 = new MetadataDao();
-      dao3.setUrl("url 3");
+      MetadataDao dao1 = getMetadataDao();
+      dao1.setUrl("https://www.example.foo");
+      MetadataDao dao2 = getMetadataDao();
+      dao2.setUrl("https://www.example.bar");
+      dao2.setApiVersion("api.gov.uk/v1alpha");
+      MetadataDao dao3 = getMetadataDao();
+      dao3.setUrl("https://www.example.baz");
+      dao3.setApiVersion("api.gov.uk/v1alpha");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
       List<ApiMetadata> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
-      assertUrl(actual.get(0), "url 1");
-      assertUrl(actual.get(1), "url 2");
-      assertUrl(actual.get(2), "url 3");
+      assertUrl(actual.get(0), "https://www.example.foo");
+      assertUrl(actual.get(1), "https://www.example.bar");
+      assertUrl(actual.get(2), "https://www.example.baz");
     }
 
     @Test
     void mapsContact() {
-      MetadataDao dao1 = new MetadataDao();
+      MetadataDao dao1 = getMetadataDao();
       dao1.setContact("contact 1");
-      MetadataDao dao2 = new MetadataDao();
+      MetadataDao dao2 = getMetadataDao();
       dao2.setContact("contact 2");
-      MetadataDao dao3 = new MetadataDao();
+      MetadataDao dao3 = getMetadataDao();
       dao3.setContact("contact 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -125,11 +121,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsOrganisation() {
-      MetadataDao dao1 = new MetadataDao();
+      MetadataDao dao1 = getMetadataDao();
       dao1.setOrganisation("org 1");
-      MetadataDao dao2 = new MetadataDao();
+      MetadataDao dao2 = getMetadataDao();
       dao2.setOrganisation("org 2");
-      MetadataDao dao3 = new MetadataDao();
+      MetadataDao dao3 = getMetadataDao();
       dao3.setOrganisation("org 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -143,23 +139,31 @@ class MetadataServiceTest {
 
     @Test
     void mapsDocumentationUrl() {
-      MetadataDao dao1 = new MetadataDao();
-      dao1.setDocumentationUrl("doc url 1");
-      MetadataDao dao2 = new MetadataDao();
-      dao2.setDocumentationUrl("doc url 2");
-      MetadataDao dao3 = new MetadataDao();
-      dao3.setDocumentationUrl("doc url 3");
+      MetadataDao dao1 = getMetadataDao();
+      dao1.setDocumentationUrl("https://www.exampledocs.foo");
+      MetadataDao dao2 = getMetadataDao();
+      dao2.setDocumentationUrl("https://www.exampledocs.bar");
+      MetadataDao dao3 = getMetadataDao();
+      dao3.setDocumentationUrl("https://www.exampledocs.baz");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
       List<ApiMetadata> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
-      assertDocumentationUrl(actual.get(0), "doc url 1");
-      assertDocumentationUrl(actual.get(1), "doc url 2");
-      assertDocumentationUrl(actual.get(2), "doc url 3");
+      assertDocumentationUrl(actual.get(0), "https://www.exampledocs.foo");
+      assertDocumentationUrl(actual.get(1), "https://www.exampledocs.bar");
+      assertDocumentationUrl(actual.get(2), "https://www.exampledocs.baz");
     }
 
-    private void assertApiVersion(ApiMetadata apiMetadata, String apiVersion) {
+    private MetadataDao getMetadataDao() {
+      MetadataDao dao = new MetadataDao();
+      dao.setApiVersion("api.gov.uk/v1alpha");
+      dao.setUrl("https://foo.bar");
+      dao.setDocumentationUrl("https://foo.baz");
+      return dao;
+    }
+
+    private void assertApiVersion(ApiMetadata apiMetadata, ApiMetadata.ApiVersion apiVersion) {
       assertThat(apiMetadata.getApiVersion()).isEqualTo(apiVersion);
     }
 
@@ -172,7 +176,7 @@ class MetadataServiceTest {
     }
 
     private void assertUrl(ApiMetadata apiMetadata, String url) {
-      assertThat(apiMetadata.getData().getUrl()).isEqualTo(url);
+      assertThat(apiMetadata.getData().getUrl()).isEqualTo(URI.create(url));
     }
 
     private void assertContact(ApiMetadata apiMetadata, String contact) {
@@ -184,7 +188,8 @@ class MetadataServiceTest {
     }
 
     private void assertDocumentationUrl(ApiMetadata apiMetadata, String documentationUrl) {
-      assertThat(apiMetadata.getData().getDocumentationUrl()).isEqualTo(documentationUrl);
+      assertThat(apiMetadata.getData().getDocumentationUrl())
+          .isEqualTo(URI.create(documentationUrl));
     }
   }
 }

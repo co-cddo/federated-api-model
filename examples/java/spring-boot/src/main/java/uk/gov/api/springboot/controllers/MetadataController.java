@@ -1,11 +1,11 @@
 package uk.gov.api.springboot.controllers;
 
 import java.util.List;
+import models.metadata.ApiMetadata;
+import models.metadata.BulkMetadataResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.api.springboot.models.metadata.ApiMetadata;
-import uk.gov.api.springboot.models.metadata.BulkApiMetadataResponse;
 import uk.gov.api.springboot.services.MetadataService;
 
 @RestController
@@ -19,10 +19,10 @@ public class MetadataController {
   }
 
   @GetMapping(produces = "application/vnd.uk.gov.api.v1alpha+json")
-  public BulkApiMetadataResponse retrieveAll() {
+  public BulkMetadataResponse retrieveAll() {
     List<ApiMetadata> apiMetadata = service.retrieveAll();
-    BulkApiMetadataResponse bulkApiMetadataResponse = new BulkApiMetadataResponse();
-    bulkApiMetadataResponse.setApis(apiMetadata);
-    return bulkApiMetadataResponse;
+    BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
+    bulkMetadataResponse.setApis(apiMetadata);
+    return bulkMetadataResponse;
   }
 }

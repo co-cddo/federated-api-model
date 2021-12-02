@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
+import models.metadata.ApiMetadata;
+import models.metadata.Data;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import uk.gov.api.springboot.models.metadata.ApiMetadata;
 import uk.gov.api.springboot.services.MetadataService;
 
 @AutoConfigureMockMvc
@@ -41,17 +42,20 @@ class MetadataControllerIntegrationTest {
     @Test
     void mockDataIsReturned() throws Exception {
       ApiMetadata apiMetadata1 = new ApiMetadata();
+      Data data1 = new Data();
+      data1.setName("API 1");
+      apiMetadata1.setData(data1);
       ApiMetadata apiMetadata2 = new ApiMetadata();
-      apiMetadata1.setApiVersion("alpha 1");
-      apiMetadata2.setApiVersion("alpha 2");
+      Data data2 = new Data();
+      data2.setName("API 2");
+      apiMetadata2.setData(data2);
 
       when(service.retrieveAll()).thenReturn(List.of(apiMetadata1, apiMetadata2));
 
       mockMvc
           .perform(get("/apis"))
           .andExpect(
-              jsonPath("$.apis[*].api-version")
-                  .value(Matchers.containsInAnyOrder("alpha 1", "alpha 2")));
+              jsonPath("$.apis[*].data.name").value(Matchers.containsInAnyOrder("API 1", "API 2")));
     }
 
     @Test

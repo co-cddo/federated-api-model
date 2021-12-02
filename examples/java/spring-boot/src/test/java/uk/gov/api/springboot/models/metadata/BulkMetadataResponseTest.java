@@ -6,56 +6,65 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import models.metadata.ApiMetadata;
+import models.metadata.BulkMetadataResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 
 @JsonTest
-class BulkApiMetadataResponseTest {
+class BulkMetadataResponseTest {
 
-  @Autowired private JacksonTester<BulkApiMetadataResponse> jacksonTester;
+  @Autowired private JacksonTester<BulkMetadataResponse> jacksonTester;
 
-  private JsonContent<BulkApiMetadataResponse> jsonContent;
+  private JsonContent<BulkMetadataResponse> jsonContent;
 
   @Nested
   class Serialization {
 
     @Test
     void apisIsSerializedWhenPresent() throws IOException {
-      BulkApiMetadataResponse bulkApiMetadataResponse = new BulkApiMetadataResponse();
+      BulkMetadataResponse BulkMetadataResponse = new BulkMetadataResponse();
       List<ApiMetadata> apiMetadata = new ArrayList<>();
       ApiMetadata apiMetadataObject = new ApiMetadata();
       apiMetadata.add(apiMetadataObject);
-      bulkApiMetadataResponse.setApis(apiMetadata);
+      BulkMetadataResponse.setApis(apiMetadata);
 
-      jsonContent = jacksonTester.write(bulkApiMetadataResponse);
+      jsonContent = jacksonTester.write(BulkMetadataResponse);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").hasSize(1);
     }
 
-    @ParameterizedTest
-    @NullAndEmptySource
-    void apisIsSerializedAsAnEmptyArrayWhenNullOrEmpty(List<ApiMetadata> apiMetadata)
-        throws IOException {
-      BulkApiMetadataResponse bulkApiMetadataResponse = new BulkApiMetadataResponse();
-      bulkApiMetadataResponse.setApis(apiMetadata);
+    @Test
+    void apisIsSerializedAsAnEmptyArrayWhenEmpty() throws IOException {
+      List<ApiMetadata> apiMetadata = new ArrayList<>();
+      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
+      bulkMetadataResponse.setApis(apiMetadata);
 
-      jsonContent = jacksonTester.write(bulkApiMetadataResponse);
+      jsonContent = jacksonTester.write(bulkMetadataResponse);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isEmpty();
     }
 
     @Test
-    void apisIsSerializedAsAnEmptyArrayWhenNotInitialised() throws IOException {
-      BulkApiMetadataResponse bulkApiMetadataResponse = new BulkApiMetadataResponse();
+    void apisIsNullWhenResponseIsNull() throws IOException {
+      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
+      bulkMetadataResponse.setApis(null);
 
-      jsonContent = jacksonTester.write(bulkApiMetadataResponse);
+      jsonContent = jacksonTester.write(bulkMetadataResponse);
+
+      assertThat(jsonContent).extractingJsonPathArrayValue("apis").isNull();
+    }
+
+    @Test
+    void apisIsSerializedAsAnEmptyArrayWhenNotInitialised() throws IOException {
+      BulkMetadataResponse BulkMetadataResponse = new BulkMetadataResponse();
+
+      jsonContent = jacksonTester.write(BulkMetadataResponse);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isEmpty();
     }
