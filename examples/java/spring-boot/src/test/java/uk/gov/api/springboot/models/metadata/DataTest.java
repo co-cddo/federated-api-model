@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.net.URI;
+import models.metadata.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
@@ -27,10 +29,10 @@ class DataTest {
       Data data = new Data();
       data.setName("some name");
       data.setDescription("some description");
-      data.setUrl("some url");
+      data.setUrl(URI.create("https://www.example.foo"));
       data.setContact("some contact");
       data.setOrganisation("some organisation");
-      data.setDocumentationUrl("some documentation url");
+      data.setDocumentationUrl(URI.create("https://www.example.bar"));
       jsonContent = jacksonTester.write(data);
     }
 
@@ -48,7 +50,9 @@ class DataTest {
 
     @Test
     void urlIsSerialized() {
-      assertThat(jsonContent).extractingJsonPathStringValue("url").isEqualTo("some url");
+      assertThat(jsonContent)
+          .extractingJsonPathStringValue("url")
+          .isEqualTo("https://www.example.foo");
     }
 
     @Test

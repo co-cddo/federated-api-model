@@ -1,8 +1,22 @@
+buildscript {
+  dependencies {
+    classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.1.1'
+  }
+}
+
 plugins {
   id 'uk.gov.api.spring-boot-conventions'
 }
 
+apply plugin: 'jsonschema2pojo'
+
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-web'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jsonSchema2Pojo {
+  source = files("../../../schemas/v1alpha")
+  targetDirectory = file("${project.buildDir}/generated-sources/js2p")
+  targetPackage = "models.metadata"
 }

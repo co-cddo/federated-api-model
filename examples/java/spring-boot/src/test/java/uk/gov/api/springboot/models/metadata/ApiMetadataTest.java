@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import models.metadata.ApiMetadata;
+import models.metadata.Data;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,11 +27,13 @@ public class ApiMetadataTest {
     @Test
     void apiVersionIsSerialized() throws IOException {
       ApiMetadata apiMetadata = new ApiMetadata();
-      apiMetadata.setApiVersion("v1-v2");
+      apiMetadata.setApiVersion(ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
 
       jsonContent = jacksonTester.write(apiMetadata);
 
-      assertThat(jsonContent).extractingJsonPathStringValue("api-version").isEqualTo("v1-v2");
+      assertThat(jsonContent)
+          .extractingJsonPathStringValue("api-version")
+          .isEqualTo("api.gov.uk/v1alpha");
     }
 
     @Test
