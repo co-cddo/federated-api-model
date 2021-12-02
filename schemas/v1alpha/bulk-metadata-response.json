@@ -5,9 +5,17 @@
   "description": "A JSON Schema to manage the format of API response objects",
   "type": "object",
   "required": [
+    "api-version",
     "apis"
   ],
   "properties": {
+    "api-version": {
+      "$comment": "The version of this bulk metadata response object",
+      "type": "string",
+      "enum": [
+        "api.gov.uk/v1alpha"
+      ]
+    },
     "apis": {
       "type": "array",
       "items": {
