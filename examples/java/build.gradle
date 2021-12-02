@@ -26,6 +26,11 @@ allprojects {
       endWithNewline()
     }
   }
+
+  tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+  }
 }
 
 sonarqube {
