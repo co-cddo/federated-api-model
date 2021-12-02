@@ -68,6 +68,18 @@ class BulkMetadataResponseTest {
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isEmpty();
     }
+
+    @Test
+    void apiVersionIsSerialized() throws IOException {
+      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
+      bulkMetadataResponse.setApiVersion(BulkMetadataResponse.ApiVersion.API_GOV_UK_V_1_ALPHA);
+
+      jsonContent = jacksonTester.write(bulkMetadataResponse);
+
+      assertThat(jsonContent)
+          .extractingJsonPathStringValue("api-version")
+          .isEqualTo("api.gov.uk/v1alpha");
+    }
   }
 
   @Nested
