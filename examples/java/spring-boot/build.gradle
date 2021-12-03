@@ -16,7 +16,7 @@ dependencies {
 }
 
 jsonSchema2Pojo {
-  source = files("../../../schemas/v1alpha")
+  source = files(fileTree(dir: '../../../schemas/v1alpha', include: ['*.json']))
   targetDirectory = file("${project.buildDir}/generated-sources/js2p")
   targetPackage = "models.metadata"
 }
