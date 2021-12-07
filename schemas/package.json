@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "test": "ajv compile -s 'v*/*.json' --strict-schema=false -c ajv-formats"
+    "test": "ajv compile -s 'v*/*.json' --strict-schema=false -c ajv-formats --spec=draft2019"
   },
   "repository": {
     "type": "git",
