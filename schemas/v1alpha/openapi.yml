@@ -1,0 +1,19 @@
+openapi: 3.1.0
+info:
+  title: Federated API Discovery API
+  version: v0
+  description: This produces metadata about APIs published by public sector organisations
+    in the UK
+paths:
+  "/apis":
+    get:
+      description: Gets metadata about APIs published by public sector organisations
+        in the UK
+      operationId: retrieveAll
+      responses:
+        '200':
+          description: A list of API metadata objects
+          content:
+            application/vnd.uk.gov.api.v1alpha+json:
+              schema:
+                $ref: 'v1alpha/bulk-metadata-response.json'
