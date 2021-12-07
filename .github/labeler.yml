@@ -1,0 +1,6 @@
+'🔧 GitHub Configuration':
+  - '.github/**/*'
+'📁 Repo: examples/java':
+  - 'examples/java/**/*'
+'📁 Repo: schemas':
+  - 'schemas/**/*'
