@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: "daily"
 
+  - package-ecosystem: "gradle"
+    directory: "/examples/java/buildSrc"
+    schedule:
+      interval: "daily"
+
   - package-ecosystem: "npm"
     directory: "/schemas"
     schedule:
