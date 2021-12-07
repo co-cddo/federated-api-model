@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/examples/java"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/schemas"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
