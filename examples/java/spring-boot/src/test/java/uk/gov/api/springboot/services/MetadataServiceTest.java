@@ -36,7 +36,7 @@ class MetadataServiceTest {
 
     @Test
     void mapsApiVersion() {
-      MetadataDao dao = getMetadataDao();
+      var dao = getMetadataDao();
       when(repository.findAll()).thenReturn(List.of(dao));
 
       List<ApiMetadata> actual = service.retrieveAll();
@@ -47,11 +47,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsName() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setName("name 1");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setName("name 2");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setName("name 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -65,11 +65,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsDescription() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setDescription("description 1");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setDescription("description 2");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setDescription("description 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -83,12 +83,12 @@ class MetadataServiceTest {
 
     @Test
     void mapsUrl() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setUrl("https://www.example.foo");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setUrl("https://www.example.bar");
       dao2.setApiVersion("api.gov.uk/v1alpha");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setUrl("https://www.example.baz");
       dao3.setApiVersion("api.gov.uk/v1alpha");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
@@ -103,11 +103,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsContact() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setContact("contact 1");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setContact("contact 2");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setContact("contact 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -121,11 +121,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsOrganisation() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setOrganisation("org 1");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setOrganisation("org 2");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setOrganisation("org 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -139,11 +139,11 @@ class MetadataServiceTest {
 
     @Test
     void mapsDocumentationUrl() {
-      MetadataDao dao1 = getMetadataDao();
+      var dao1 = getMetadataDao();
       dao1.setDocumentationUrl("https://www.exampledocs.foo");
-      MetadataDao dao2 = getMetadataDao();
+      var dao2 = getMetadataDao();
       dao2.setDocumentationUrl("https://www.exampledocs.bar");
-      MetadataDao dao3 = getMetadataDao();
+      var dao3 = getMetadataDao();
       dao3.setDocumentationUrl("https://www.exampledocs.baz");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
@@ -156,7 +156,7 @@ class MetadataServiceTest {
     }
 
     private MetadataDao getMetadataDao() {
-      MetadataDao dao = new MetadataDao();
+      var dao = new MetadataDao();
       dao.setApiVersion("api.gov.uk/v1alpha");
       dao.setUrl("https://foo.bar");
       dao.setDocumentationUrl("https://foo.baz");

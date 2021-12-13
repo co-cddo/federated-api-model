@@ -26,7 +26,7 @@ public class ApiMetadataTest {
 
     @Test
     void apiVersionIsSerialized() throws IOException {
-      ApiMetadata apiMetadata = new ApiMetadata();
+      var apiMetadata = new ApiMetadata();
       apiMetadata.setApiVersion(ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
 
       jsonContent = jacksonTester.write(apiMetadata);
@@ -38,8 +38,8 @@ public class ApiMetadataTest {
 
     @Test
     void dataIsSerialized() throws IOException {
-      Data data = new Data();
-      ApiMetadata apiMetadata = new ApiMetadata();
+      var data = new Data();
+      var apiMetadata = new ApiMetadata();
       apiMetadata.setData(data);
 
       jsonContent = jacksonTester.write(apiMetadata);

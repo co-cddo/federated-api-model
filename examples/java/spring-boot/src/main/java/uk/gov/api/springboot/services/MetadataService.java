@@ -24,9 +24,9 @@ public class MetadataService {
 
   private static Function<MetadataDao, ApiMetadata> convertToApiMetadata() {
     return dao -> {
-      ApiMetadata apiMetadata = new ApiMetadata();
+      var apiMetadata = new ApiMetadata();
       apiMetadata.setApiVersion(ApiMetadata.ApiVersion.fromValue(dao.getApiVersion()));
-      Data data = new Data();
+      var data = new Data();
       data.setName(dao.getName());
       data.setDescription(dao.getDescription());
       data.setUrl(URI.create(dao.getUrl()));

@@ -21,8 +21,8 @@ public class MetadataController {
   @GetMapping(produces = "application/vnd.uk.gov.api.v1alpha+json")
   public BulkMetadataResponse retrieveAll() {
     List<ApiMetadata> apiMetadata = service.retrieveAll();
-    BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
-    bulkMetadataResponse.setApis(apiMetadata);
-    return bulkMetadataResponse;
+    var response = new BulkMetadataResponse();
+    response.setApis(apiMetadata);
+    return response;
   }
 }
