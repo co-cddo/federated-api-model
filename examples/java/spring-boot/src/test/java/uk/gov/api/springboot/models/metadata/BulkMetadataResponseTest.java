@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import models.metadata.ApiMetadata;
 import models.metadata.BulkMetadataResponse;
 import org.junit.jupiter.api.Disabled;
@@ -28,53 +27,53 @@ class BulkMetadataResponseTest {
 
     @Test
     void apisIsSerializedWhenPresent() throws IOException {
-      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
-      List<ApiMetadata> apiMetadata = new ArrayList<>();
-      ApiMetadata apiMetadataObject = new ApiMetadata();
+      var response = new BulkMetadataResponse();
+      var apiMetadata = new ArrayList<ApiMetadata>();
+      var apiMetadataObject = new ApiMetadata();
       apiMetadata.add(apiMetadataObject);
-      bulkMetadataResponse.setApis(apiMetadata);
+      response.setApis(apiMetadata);
 
-      jsonContent = jacksonTester.write(bulkMetadataResponse);
+      jsonContent = jacksonTester.write(response);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").hasSize(1);
     }
 
     @Test
     void apisIsSerializedAsAnEmptyArrayWhenEmpty() throws IOException {
-      List<ApiMetadata> apiMetadata = new ArrayList<>();
-      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
-      bulkMetadataResponse.setApis(apiMetadata);
+      var apiMetadata = new ArrayList<ApiMetadata>();
+      var response = new BulkMetadataResponse();
+      response.setApis(apiMetadata);
 
-      jsonContent = jacksonTester.write(bulkMetadataResponse);
+      jsonContent = jacksonTester.write(response);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isEmpty();
     }
 
     @Test
     void apisIsNullWhenResponseIsNull() throws IOException {
-      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
-      bulkMetadataResponse.setApis(null);
+      var response = new BulkMetadataResponse();
+      response.setApis(null);
 
-      jsonContent = jacksonTester.write(bulkMetadataResponse);
+      jsonContent = jacksonTester.write(response);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isNull();
     }
 
     @Test
     void apisIsSerializedAsAnEmptyArrayWhenNotInitialised() throws IOException {
-      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
+      var response = new BulkMetadataResponse();
 
-      jsonContent = jacksonTester.write(bulkMetadataResponse);
+      jsonContent = jacksonTester.write(response);
 
       assertThat(jsonContent).extractingJsonPathArrayValue("apis").isEmpty();
     }
 
     @Test
     void apiVersionIsSerialized() throws IOException {
-      BulkMetadataResponse bulkMetadataResponse = new BulkMetadataResponse();
-      bulkMetadataResponse.setApiVersion(BulkMetadataResponse.ApiVersion.API_GOV_UK_V_1_ALPHA);
+      var response = new BulkMetadataResponse();
+      response.setApiVersion(BulkMetadataResponse.ApiVersion.API_GOV_UK_V_1_ALPHA);
 
-      jsonContent = jacksonTester.write(bulkMetadataResponse);
+      jsonContent = jacksonTester.write(response);
 
       assertThat(jsonContent)
           .extractingJsonPathStringValue("api-version")

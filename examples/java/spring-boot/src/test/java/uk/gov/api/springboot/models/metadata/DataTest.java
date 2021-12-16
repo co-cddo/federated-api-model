@@ -26,7 +26,7 @@ class DataTest {
   class Serialization {
     @BeforeEach
     void setup() throws IOException {
-      Data data = new Data();
+      var data = new Data();
       data.setName("some name");
       data.setDescription("some description");
       data.setUrl(URI.create("https://www.example.foo"));

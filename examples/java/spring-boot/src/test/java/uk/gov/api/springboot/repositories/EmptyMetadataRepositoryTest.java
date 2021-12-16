@@ -9,14 +9,14 @@ class EmptyMetadataRepositoryTest {
 
   @Test
   void findAllReturnsEmptyList() {
-    EmptyMetadataRepository repository = new EmptyMetadataRepository();
+    var repository = new EmptyMetadataRepository();
 
     assertThat(repository.findAll()).isEmpty();
   }
 
   @Test
   void findAllReturnsUnmodifiableList() {
-    EmptyMetadataRepository repository = new EmptyMetadataRepository();
+    var repository = new EmptyMetadataRepository();
 
     var actual = repository.findAll();
 

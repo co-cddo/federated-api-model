@@ -41,12 +41,12 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void mockDataIsReturned() throws Exception {
-      ApiMetadata apiMetadata1 = new ApiMetadata();
-      Data data1 = new Data();
+      var apiMetadata1 = new ApiMetadata();
+      var data1 = new Data();
       data1.setName("API 1");
       apiMetadata1.setData(data1);
-      ApiMetadata apiMetadata2 = new ApiMetadata();
-      Data data2 = new Data();
+      var apiMetadata2 = new ApiMetadata();
+      var data2 = new Data();
       data2.setName("API 2");
       apiMetadata2.setData(data2);
 
