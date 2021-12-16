@@ -25,6 +25,10 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
     }
+    format 'xml', {
+      target 'src/**/*.xml'
+      eclipseWtp('xml', '4.21.0')
+    }
   }
 
   tasks.withType(AbstractArchiveTask).configureEach {
