@@ -20,3 +20,5 @@ We will use Spring Boot as there is a strong level of experience in the team, al
 ## Consequences
 
 Spring Boot is not widely used, so maintenance longer term may be more difficult. However, as this is a POC, the expectation is that it may not be supported once the discovery phase is complete.
+
+Spring Boot will provide us the fastest velocity for delivery, allowing us to exercise good development practices and build on top of existing knowledge.
