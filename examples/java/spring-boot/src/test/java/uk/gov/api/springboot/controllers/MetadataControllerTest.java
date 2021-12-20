@@ -31,6 +31,8 @@ class MetadataControllerTest {
       BulkMetadataResponse actual = controller.retrieveAll();
 
       assertThat(actual.getApis()).isEqualTo(apiMetadata);
+      assertThat(actual.getApiVersion())
+          .isEqualTo(BulkMetadataResponse.ApiVersion.API_GOV_UK_V_1_ALPHA);
     }
   }
 }
