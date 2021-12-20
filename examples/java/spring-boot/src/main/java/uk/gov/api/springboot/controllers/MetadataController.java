@@ -23,6 +23,7 @@ public class MetadataController {
     List<ApiMetadata> apiMetadata = service.retrieveAll();
     var response = new BulkMetadataResponse();
     response.setApis(apiMetadata);
+    response.setApiVersion(BulkMetadataResponse.ApiVersion.API_GOV_UK_V_1_ALPHA);
     return response;
   }
 }
