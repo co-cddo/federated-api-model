@@ -1,7 +1,7 @@
 ---
 creation_date: 2021-11-24
 decision_date: 2021-11-25
-status: accepted
+status: superceded
 ---
 # Initial Metadata Model - `v1alpha`
 
