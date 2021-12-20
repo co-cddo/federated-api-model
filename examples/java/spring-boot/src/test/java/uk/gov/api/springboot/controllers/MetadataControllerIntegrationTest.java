@@ -4,6 +4,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import io.restassured.module.jsv.JsonSchemaValidator;
+import java.net.URI;
 import java.util.List;
 import models.metadata.ApiMetadata;
 import models.metadata.Data;
@@ -59,6 +61,19 @@ class MetadataControllerIntegrationTest {
     }
 
     @Test
+    void returnsResponseValidatesAgainstSchema() throws Exception {
+      when(service.retrieveAll()).thenReturn(List.of(validObject()));
+
+      mockMvc
+          .perform(get("/apis"))
+          .andExpect(
+              content()
+                  .string(
+                      JsonSchemaValidator.matchesJsonSchemaInClasspath(
+                          "schemas/v1alpha/bulk-metadata-response.json")));
+    }
+
+    @Test
     void returnsCorrectContentType() throws Exception {
       ResultActions resultActions = mockMvc.perform(get("/apis"));
       assertContentTypeIsCorrect(resultActions);
@@ -90,5 +105,19 @@ class MetadataControllerIntegrationTest {
       resultActions.andExpect(
           header().string("content-type", "application/vnd.uk.gov.api.v1alpha+json"));
     }
+  }
+
+  private static ApiMetadata validObject() {
+    var apiMetadata = new ApiMetadata();
+    apiMetadata.setApiVersion(ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
+    var data = new Data();
+    data.setName("Name");
+    data.setContact("contact@email");
+    data.setDescription("the API description");
+    data.setOrganisation("The Org");
+    data.setDocumentationUrl(URI.create("https://docs.example"));
+    data.setUrl(URI.create("https://api-endpoint.example"));
+    apiMetadata.setData(data);
+    return apiMetadata;
   }
 }
