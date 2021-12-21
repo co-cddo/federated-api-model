@@ -4,3 +4,6 @@
   - 'examples/java/**/*'
 '📁 Repo: schemas':
   - 'schemas/**/*'
+'📚 Documentation':
+  - 'adr/*'
+  - '**/*.md'
