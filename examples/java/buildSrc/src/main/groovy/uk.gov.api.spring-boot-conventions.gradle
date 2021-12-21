@@ -9,3 +9,7 @@ configurations {
   testImplementation.exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
   testRuntimeOnly.exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 }
+
+dependencies {
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.0")
+}

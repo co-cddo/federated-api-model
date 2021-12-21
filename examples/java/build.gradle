@@ -18,6 +18,13 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
     }
+    groovy {
+      target 'src/**/*.groovy'
+      greclipse()
+      indentWithSpaces(2)
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
     groovyGradle {
       target '**/*.gradle'
       greclipse()

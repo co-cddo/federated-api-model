@@ -1,3 +1,5 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+
 buildscript {
   dependencies {
     classpath 'org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:1.1.1'
@@ -6,6 +8,7 @@ buildscript {
 
 plugins {
   id 'uk.gov.api.spring-boot-conventions'
+  id "org.springframework.cloud.contract" version '3.1.0'
 }
 
 apply plugin: 'jsonschema2pojo'
@@ -16,6 +19,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-web'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.rest-assured:json-schema-validator:4.4.0'
+  testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
 }
 
 task copySchemas(type: Copy) {
@@ -30,3 +34,14 @@ jsonSchema2Pojo {
   targetDirectory = file("${project.buildDir}/generated-sources/js2p")
   targetPackage = "uk.gov.api.models.metadata"
 }
+
+contracts {
+  testFramework = TestFramework.JUNIT5
+  baseClassForTests = 'uk.gov.api.springboot.contract.BaseTestClass'
+}
+
+contractTest {
+  useJUnitPlatform()
+}
+
+test.finalizedBy contractTest
