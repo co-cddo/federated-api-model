@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import models.metadata.ApiMetadata;
-import models.metadata.BulkMetadataResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import uk.gov.api.models.metadata.ApiMetadata;
+import uk.gov.api.models.metadata.BulkMetadataResponse;
 
 @JsonTest
 class BulkMetadataResponseTest {

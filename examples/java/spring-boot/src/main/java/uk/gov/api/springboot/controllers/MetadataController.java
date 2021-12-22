@@ -1,11 +1,11 @@
 package uk.gov.api.springboot.controllers;
 
 import java.util.List;
-import models.metadata.ApiMetadata;
-import models.metadata.BulkMetadataResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.api.models.metadata.ApiMetadata;
+import uk.gov.api.models.metadata.BulkMetadataResponse;
 import uk.gov.api.springboot.services.MetadataService;
 
 @RestController
