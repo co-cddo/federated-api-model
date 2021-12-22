@@ -28,5 +28,5 @@ processTestResources.finalizedBy copySchemas
 jsonSchema2Pojo {
   source = files(fileTree(dir: '../../../schemas/v1alpha', include: ['*.json']))
   targetDirectory = file("${project.buildDir}/generated-sources/js2p")
-  targetPackage = "models.metadata"
+  targetPackage = "uk.gov.api.models.metadata"
 }

@@ -4,14 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import models.metadata.ApiMetadata;
-import models.metadata.BulkMetadataResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.api.models.metadata.ApiMetadata;
+import uk.gov.api.models.metadata.BulkMetadataResponse;
 import uk.gov.api.springboot.services.MetadataService;
 
 @ExtendWith(MockitoExtension.class)
