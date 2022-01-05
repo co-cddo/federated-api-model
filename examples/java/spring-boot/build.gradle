@@ -38,6 +38,17 @@ jsonSchema2Pojo {
 contracts {
   testFramework = TestFramework.JUNIT5
   baseClassForTests = 'uk.gov.api.springboot.contract.BaseTestClass'
+
+  contractRepository {
+//    repositoryUrl = "git://https://github.com/spring-cloud-samples/spring-cloud-contract-nodejs-contracts-git.git"
+    repositoryUrl = "git://git@github.com:co-cddo/federated-api-model-contracts.git"
+  }
+  contractsProperties =
+[
+      'git.branch' : 'main'
+    ]
+
+  contractsMode = "REMOTE"
 }
 
 contractTest {
