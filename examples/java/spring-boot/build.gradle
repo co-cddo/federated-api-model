@@ -30,3 +30,7 @@ jsonSchema2Pojo {
   targetDirectory = file("${project.buildDir}/generated-sources/js2p")
   targetPackage = "uk.gov.api.models.metadata"
 }
+
+bootJar {
+  archiveName = 'federated-api-model.jar'
+}
