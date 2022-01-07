@@ -5,7 +5,8 @@ tags:
 ---
 # URL
 
-A **URL** (Uniform Resource Locator) is a valid _publicly resolvable_ HTTP address conforming to the [WHATWG specification].
+A **url value** MUST be a valid _publicly resolvable_ HTTP address conforming to the [WHATWG specification].
+
 
 There are a few competing specifications to account for:
 
