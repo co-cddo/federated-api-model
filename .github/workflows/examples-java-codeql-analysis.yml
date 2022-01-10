@@ -1,7 +1,10 @@
 name: "CodeQL Analysis"
 
 on:
-  push: {}
+  push:
+    paths:
+      - "examples/java/**"
+      - ".github/workflows/examples-java-codeql-analysis.yml"
   pull_request:
     paths:
       - "examples/java/**"
