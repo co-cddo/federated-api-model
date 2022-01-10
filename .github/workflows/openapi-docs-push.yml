@@ -3,6 +3,8 @@ name: Test OpenAPI doc is valid (Push)
 on:
   push:
     paths:
+      - '.github/workflows/openapi-docs-push.yml'
+      - 'schemas/.spectral.yml'
       - "schemas/*/openapi.yml"
 jobs:
   build:
