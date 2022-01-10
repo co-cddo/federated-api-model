@@ -3,6 +3,7 @@ name: Test OpenAPI doc is valid on Pull Requests
 on:
   pull_request:
     paths:
+      - 'schemas/.spectral.yml'
       - "schemas/*/openapi.yml"
 jobs:
   build:

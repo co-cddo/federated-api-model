@@ -3,6 +3,7 @@ name: Test OpenAPI doc is valid (Push)
 on:
   push:
     paths:
+      - 'schemas/.spectral.yml'
       - "schemas/*/openapi.yml"
 jobs:
   build:
