@@ -1,4 +1,6 @@
 ---
+tags:
+  - specification
 ---
 # Resource Description Framework (RDF)
 
