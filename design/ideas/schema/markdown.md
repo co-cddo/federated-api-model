@@ -7,7 +7,7 @@ tags:
 
 A **markdown value** MUST be a valid [[utf-8]] string conforming to [CommonMark].
 
-Note that [OpenAPI] 3 expects CommonMark **0.27**.
+Note that [[open-api]] 3.1 expects CommonMark **0.27**.
 
 
 ## Unknowns
@@ -19,4 +19,3 @@ Note that [OpenAPI] 3 expects CommonMark **0.27**.
 
 
 [CommonMark]: https://commonmark.org/
-[OpenAPI]: https://spec.openapis.org/oas/latest.html#rich-text-formatting
