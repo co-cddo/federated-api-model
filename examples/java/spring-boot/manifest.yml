@@ -1,0 +1,7 @@
+---
+applications:
+  - name: federated-api-model-spring-boot-sandbox
+    buildpacks:
+      - https://github.com/cloudfoundry/java-buildpack.git#v4.47
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 17.+ } }'

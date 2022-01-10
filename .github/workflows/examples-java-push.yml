@@ -55,3 +55,30 @@ jobs:
           name: examples-java-reports
           path: '**/build/reports/*'
           retention-days: 5
+      - name: Upload spring-boot manifest
+        uses: actions/upload-artifact@v2
+        with:
+          name: spring-boot-manifest
+          path: 'examples/java/spring-boot/manifest.yml'
+          retention-days: 5
+  deploy:
+    environment: sandbox
+    runs-on: ubuntu-18.04
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: examples-java-libs
+      - uses: actions/download-artifact@v2
+        with:
+          name: spring-boot-manifest
+      - name: Deploy to PaaS
+        uses: citizen-of-planet-earth/cf-cli-action@v2
+        with:
+          cf_api: https://api.london.cloud.service.gov.uk
+          cf_username: ${{ secrets.CF_USER }}
+          cf_password: ${{ secrets.CF_PASSWORD }}
+          cf_org: cabinet-office-cddo-dsa-apis
+          cf_space: sandbox
+          command: push -f manifest.yml -p examples/java/spring-boot/build/libs/federated-api-model.jar
