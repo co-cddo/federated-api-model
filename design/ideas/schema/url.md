@@ -5,11 +5,17 @@ tags:
 ---
 # URL
 
-A **url value** MUST be a valid _publicly resolvable_ HTTP address conforming to the [WHATWG specification]. A url value MUST also be absolute and fully expanded.
+A **url value** MUST be a valid _publicly resolvable_ HTTP address conforming to the [IETF RFC 3986]. Further constraints can be applied for the federated model:
+
+- A url value MUST be absolute and fully expanded.
+- A url value MUST make explicit use of the `https` _scheme_. ==NOTE: this rejects `http` which should be a reasonable assumption in our context.==
+- A url value MUST NOT have an IP as its _authority_.
+- A url value MUST NOT have a _userinfo_ component in its _authority_.
+
 
 There are a few competing specifications to account for:
 
-- [WHATWG specification]. It is managed by the major browser vendors and claim to make an effort to align with [IETF RFC 3986] (URI) and [IETF RFC 3987] (IRI).
+- [WHATWG specification]. It is managed by the major browser vendors and claim to make an effort to align with [IETF RFC 3986] (URI) and [IETF RFC 3987] (IRI) but [it's not the reality](https://github.com/bagder/docs/blob/master/URL-interop.md).
 - [IETF RFC 3986]. Uniform Resource Identifier (URI).
 - [IETF RFC 3987]. Internationalized Resource Identifiers (IRIs)
 
@@ -22,6 +28,13 @@ That said, [[json-schema]] depends on [IETF RFC 3986] for its internal URI resol
 [open-api] depends on [IETF RFC 3986] for [URI and URL resolution](https://spec.openapis.org/oas/latest.html#relative-references-in-uris) with no mention of IRIs but claiming to align with [json-schema].
 
 Finally, GOV.UK mentions [IETF RFC 3986] in [Persistent Resolvable Identifiers](https://www.gov.uk/government/publications/open-standards-for-government/persistent-resolvable-identifiers) (it hasn't been reviewed since 2017).
+
+
+## Unknowns
+
+- [ ] Is it safe to reject url values with an explicit port or are there valid cases for say internal APIs where that's required?
+- [ ] Is it safe to reject url values with a _fragment_ component?
+- [ ] Would be good to consider canonicalisation rules to ensure presence of absence of trailing slash.
 
 
 [WHATWG specification]: https://url.spec.whatwg.org/
