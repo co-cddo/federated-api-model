@@ -2,8 +2,6 @@
 applications:
   - name: federated-api-model-spring-boot-sandbox
     buildpacks:
-      - https://github.com/cloudfoundry/java-buildpack.git#v4.47
-    env:
-      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 17.+ } }'
+      - https://github.com/paketo-buildpacks/spring-boot.git#v5.3.1
     health-check-type: http
     health-check-http-endpoint: '/actuator/health'
