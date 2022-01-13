@@ -10,12 +10,12 @@ The registry should be able to manage source records with:
 
 - Unique identifier ([[id]]).
 - Source URL ([[url]])
-- Organisation ([[ideas/schema/organisation]]).
+- Organisation ([[organisation]]).
 - Schedule. Minimum/desired frequency of polling from the API.
 
 ### Paradata
 
-- Last fetch ([[ideas/schema/timestamp]]). Track when the source was last queried.
+- Last fetch ([[timestamp]]). Track when the source was last queried.
 - Last errors (?). We should keep track of the last n (e.g. 3) errors and use them to analyse whether we need to take action or not. E.g. 3 timeouts should be treated differently than 3 unresolved host.
 
 
