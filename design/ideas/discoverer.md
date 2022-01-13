@@ -4,7 +4,7 @@ tags:
 ---
 # Discoverer
 
-The **discoverer** implements a consumer for a discovery protocol (undefined, see [[registry#Discovery]] for a potential avenue).
+The **discoverer** implements a consumer for a discovery protocol (undefined, see [[registry#Discovery]] for a potential avenue). ^973752
 
 The objective would be to actively find [[provider]] implementors as well as basic information about them and the owner [[organisation]].
 

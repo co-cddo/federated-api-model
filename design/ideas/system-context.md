@@ -12,7 +12,7 @@ Large: [[system-context.svg]]. Source: [[artefacts/system-context.drawio]]
 - Storage![[storage#^2af9d7]]
 - Fetcher ![[fetcher#^73fba2]]
 - Registry ![[registry#^94979d]]
-
+- Discoverer ![[discoverer#^973752]]
 
 
 ## Questions
