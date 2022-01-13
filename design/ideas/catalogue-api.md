@@ -37,9 +37,9 @@ Provides the full infoset for the requested record.
 
 The response infoset MUST provide:
 
-- `id` ([[ideas/schema/id]])`: The record unique identifier.
-- `name` ([[ideas/schema/text]])`: The name for the API.
-- `description` ([[ideas/schema/markdown]])`: The description of what the API is about.
+- `id` ([[ideas/schema/id]]): The record unique identifier.
+- `name` ([[ideas/schema/text]]): The name for the API.
+- `description` ([[ideas/schema/markdown]]): The description of what the API is about.
 - `url` ([[ideas/schema/url]]): The  URL of the API.
 
 
