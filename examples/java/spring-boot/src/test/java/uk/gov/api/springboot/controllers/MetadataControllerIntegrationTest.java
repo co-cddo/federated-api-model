@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.restassured.module.jsv.JsonSchemaValidator;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -99,6 +100,22 @@ class MetadataControllerIntegrationTest {
           .perform(get("/apis").accept(mediaType))
           .andExpect(status().isNotAcceptable())
           .andExpect(content().string(""));
+    }
+
+    @Test
+    void returnsCorrelationIdInResponseIfValidUuidProvided() throws Exception {
+      String uuid = UUID.randomUUID().toString();
+      mockMvc
+          .perform(get("/apis").header("correlation-id", uuid))
+          .andExpect(header().string("correlation-id", uuid));
+    }
+
+    @Test
+    void throwExceptionIfInvalidUuidProvided() throws Exception {
+      String uuid = "invalid";
+      mockMvc
+          .perform(get("/apis").header("correlation-id", uuid))
+          .andExpect(status().isBadRequest()); // TODO
     }
 
     private void assertContentTypeIsCorrect(ResultActions resultActions) throws Exception {

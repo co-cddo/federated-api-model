@@ -17,6 +17,12 @@ paths:
             application/vnd.uk.gov.api.v1alpha+json:
               schema:
                 $ref: 'v1alpha/bulk-metadata-response.json'
+        '400':
+          description: The request was malformed
+          content:
+            application/vnd.uk.gov.api.v1alpha+json:
+              schema:
+                $ref: 'v1alpha/error-response.json'
       parameters:
         - name: correlation-id
           in: header
