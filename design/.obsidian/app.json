@@ -4,5 +4,6 @@
   "spellcheck": false,
   "useTab": false,
   "tabSize": 2,
-  "vimMode": true
+  "vimMode": true,
+  "alwaysUpdateLinks": true
 }

@@ -9,7 +9,7 @@ The content type SHOULD be `application/vnd.uk.gov.api.v1alpha+json` and accept 
 
 ## Resources
 
-- [[api]]
+- [[api-resource]]
 
 
 ## Api list
@@ -20,7 +20,7 @@ The content type SHOULD be `application/vnd.uk.gov.api.v1alpha+json` and accept 
   - `prev`: Path to the previous page if any.
   - `content-type`: `application/vnd.uk.gov.api.v1alpha+json`
 
-Provides a paginated list of [[api]] resources.
+Provides a paginated list of [[api-resource]] resources.
 
 
 ## Api
@@ -29,7 +29,7 @@ Provides a paginated list of [[api]] resources.
 
 - endpoint:: `GET /apis/{id}/`
 - parameters::
-  - `id`: A valid [[api]] identifier.
+  - `id`: A valid [[api-resource]] identifier.
 
 Provides the full infoset for the requested record.
 
