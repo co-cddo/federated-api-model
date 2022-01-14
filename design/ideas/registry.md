@@ -10,7 +10,7 @@ The registry should be able to manage source records with:
 
 - Unique identifier ([[id]]).
 - Source URL ([[url]])
-- Organisation ([[organisation]]).
+- Organisation ([[organisation-resource]]).
 - Schedule. Minimum/desired frequency of polling from the API.
 
 ### Paradata

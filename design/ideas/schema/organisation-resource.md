@@ -1,15 +1,16 @@
 ---
 tags:
   - schema
-  - type
+  - resource
 ---
 # Organisation
 
-An **organisation value** is a compound value with multiple attributes identifying the organisation.
+An **organisation resource** aims to identify an organisation uniquely as well as providing a point of contact.
 
 - Unique identifier ([[id]]).
 - Organisation URL ([[url]])
 - Organisation Name ([[text]])
+- Organisation Email ([[email]])
 
 
 Short term this information is likely to be manually curated but would be good to explore the [[registry#Discovery]] solution for a robust, scalable solution.
