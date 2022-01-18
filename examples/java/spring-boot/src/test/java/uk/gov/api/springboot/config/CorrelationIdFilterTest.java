@@ -4,21 +4,25 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import me.jvt.uuid.Patterns;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.springboot.exceptions.CorrelationIdMalformedException;
 
 @ExtendWith(MockitoExtension.class)
 class CorrelationIdFilterTest {
@@ -26,8 +30,8 @@ class CorrelationIdFilterTest {
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   @Mock private FilterChain filterChain;
-
-  private final CorrelationIdFilter filter = new CorrelationIdFilter();
+  @Mock private ObjectMapper mapper;
+  @InjectMocks private CorrelationIdFilter filter;
 
   @Test
   void delegatesToFilterChain() throws ServletException, IOException {
@@ -58,14 +62,68 @@ class CorrelationIdFilterTest {
     verify(response).addHeader("correlation-id", uuid);
   }
 
+  @Nested
+  class UuidIsInvalid {
+
+    @Mock private PrintWriter writer;
+
+    @BeforeEach
+    void setUp() throws IOException {
+      when(response.getWriter()).thenReturn(writer);
+    }
+
+    private void runFilter(String correlationId) throws ServletException, IOException {
+      when(request.getHeader("correlation-id")).thenReturn(correlationId);
+      filter.doFilterInternal(request, response, filterChain);
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource(strings = {"invalid"})
+    void aBadRequestIsReturnedIfUuidIsInvalid(String correlationId)
+        throws ServletException, IOException {
+      runFilter(correlationId);
+
+      verify(response).setStatus(400);
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource(strings = {"invalid"})
+    void contentTypeIsV1AlphaJsonIfUuidIsInvalid(String correlationId)
+        throws ServletException, IOException {
+      runFilter(correlationId);
+
+      verify(response).setContentType("application/vnd.uk.gov.api.v1alpha+json");
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource(strings = {"invalid"})
+    void responseBodyIsAddedIfUuidIsInvalid(String correlationId)
+        throws ServletException, IOException {
+      when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
+      when(response.getWriter()).thenReturn(writer);
+      runFilter(correlationId);
+
+      verify(writer).write("Serialised JSON");
+    }
+  }
+
   @ParameterizedTest
   @EmptySource
   @ValueSource(strings = {"invalid"})
-  void throwAnExceptionIfUuidIsInvalid(String correlationId) {
+  void responseBodyIsAddedIfUuidIsInvalid(
+      String correlationId, @Mock PrintWriter writer, @Mock ObjectMapper mapper)
+      throws ServletException, IOException {
+    CorrelationIdFilter filter = new CorrelationIdFilter(mapper);
     when(request.getHeader("correlation-id")).thenReturn(correlationId);
+    when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
+    when(response.getWriter()).thenReturn(writer);
 
-    assertThatThrownBy(() -> filter.doFilterInternal(request, response, filterChain))
-        .isInstanceOf(CorrelationIdMalformedException.class);
+    filter.doFilterInternal(request, response, filterChain);
+
+    verify(writer).write("Serialised JSON");
   }
 
   @Test
