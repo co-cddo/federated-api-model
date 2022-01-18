@@ -111,7 +111,7 @@ class MetadataControllerIntegrationTest {
     }
 
     @Test
-    void throwExceptionIfInvalidUuidProvided() throws Exception {
+    void returns400IfInvalidUuidProvided() throws Exception {
       String uuid = "invalid";
       mockMvc
           .perform(get("/apis").header("correlation-id", uuid))
