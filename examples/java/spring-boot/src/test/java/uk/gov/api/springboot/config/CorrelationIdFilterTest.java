@@ -84,31 +84,40 @@ class CorrelationIdFilterTest {
     @ParameterizedTest
     @EmptySource
     @ValueSource(strings = {"invalid"})
-    void aBadRequestIsReturnedIfUuidIsInvalid(String correlationId)
-        throws ServletException, IOException {
+    void aBadRequestIsReturned(String correlationId) throws ServletException, IOException {
       runFilter(correlationId);
 
       verify(response).setStatus(400);
     }
 
-    @ParameterizedTest
-    @EmptySource
-    @ValueSource(strings = {"invalid"})
-    void contentTypeIsV1AlphaJsonIfUuidIsInvalid(String correlationId)
-        throws ServletException, IOException {
+    @Test
+    void contentTypeIsV1AlphaJson() throws ServletException, IOException {
+      String correlationId = "invalid";
       runFilter(correlationId);
 
       verify(response).setContentType("application/vnd.uk.gov.api.v1alpha+json");
     }
 
-    @ParameterizedTest
-    @EmptySource
-    @ValueSource(strings = {"invalid"})
-    void responseBodyIsAddedIfUuidIsInvalid(String correlationId)
-        throws ServletException, IOException {
+    @Test
+    void responseBodyIsAdded() throws ServletException, IOException {
+      String correlationId = "invalid";
       when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
       when(response.getWriter()).thenReturn(writer);
       runFilter(correlationId);
+
+      verify(writer).write("Serialised JSON");
+    }
+
+    @Test
+    void responseBodyIsAdded(@Mock PrintWriter writer, @Mock ObjectMapper mapper)
+        throws ServletException, IOException {
+      String correlationId = "invalid";
+      CorrelationIdFilter filter = new CorrelationIdFilter(mapper);
+      when(request.getHeader("correlation-id")).thenReturn(correlationId);
+      when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
+      when(response.getWriter()).thenReturn(writer);
+
+      filter.doFilterInternal(request, response, filterChain);
 
       verify(writer).write("Serialised JSON");
     }
@@ -127,22 +136,6 @@ class CorrelationIdFilterTest {
           .usingRecursiveComparison()
           .isEqualTo(expected);
     }
-  }
-
-  @ParameterizedTest
-  @EmptySource
-  @ValueSource(strings = {"invalid"})
-  void responseBodyIsAddedIfUuidIsInvalid(
-      String correlationId, @Mock PrintWriter writer, @Mock ObjectMapper mapper)
-      throws ServletException, IOException {
-    CorrelationIdFilter filter = new CorrelationIdFilter(mapper);
-    when(request.getHeader("correlation-id")).thenReturn(correlationId);
-    when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
-    when(response.getWriter()).thenReturn(writer);
-
-    filter.doFilterInternal(request, response, filterChain);
-
-    verify(writer).write("Serialised JSON");
   }
 
   @Test
