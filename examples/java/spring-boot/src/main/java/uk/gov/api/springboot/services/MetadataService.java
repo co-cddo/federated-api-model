@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.function.Function;
 import org.springframework.stereotype.Service;
-import uk.gov.api.models.metadata.ApiMetadata;
-import uk.gov.api.models.metadata.Data;
+import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.models.metadata.v1alpha.Data;
 import uk.gov.api.springboot.daos.MetadataDao;
 import uk.gov.api.springboot.repositories.MetadataRepository;
 

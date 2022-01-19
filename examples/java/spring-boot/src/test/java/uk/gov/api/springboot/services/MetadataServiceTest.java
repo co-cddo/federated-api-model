@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.models.metadata.ApiMetadata;
+import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.springboot.daos.MetadataDao;
 import uk.gov.api.springboot.repositories.MetadataRepository;
 
