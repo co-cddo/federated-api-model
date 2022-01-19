@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.models.metadata;
+package uk.gov.api.springboot.models.metadata.v1alpha;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import uk.gov.api.models.metadata.ApiMetadata;
-import uk.gov.api.models.metadata.BulkMetadataResponse;
+import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.models.metadata.v1alpha.BulkMetadataResponse;
 
 @JsonTest
 class BulkMetadataResponseTest {
