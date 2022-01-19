@@ -115,7 +115,8 @@ class MetadataControllerIntegrationTest {
       String uuid = "invalid";
       mockMvc
           .perform(get("/apis").header("correlation-id", uuid))
-          .andExpect(status().isBadRequest()); // TODO
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.error").value("invalid_request")); // TODO
     }
 
     private void assertContentTypeIsCorrect(ResultActions resultActions) throws Exception {

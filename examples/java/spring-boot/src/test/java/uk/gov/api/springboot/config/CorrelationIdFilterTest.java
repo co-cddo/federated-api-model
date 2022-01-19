@@ -1,5 +1,6 @@
 package uk.gov.api.springboot.config;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -20,9 +21,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.api.models.metadata.ErrorResponse;
 
 @ExtendWith(MockitoExtension.class)
 class CorrelationIdFilterTest {
@@ -107,6 +111,21 @@ class CorrelationIdFilterTest {
       runFilter(correlationId);
 
       verify(writer).write("Serialised JSON");
+    }
+
+    @Captor private ArgumentCaptor<ErrorResponse> errorResponseArgumentCaptor;
+
+    @Test
+    void errorResponseIsReturned() throws IOException, ServletException {
+      ErrorResponse expected = new ErrorResponse();
+      expected.setError(ErrorResponse.Error.INVALID_REQUEST);
+
+      runFilter("");
+      verify(mapper).writeValueAsString(errorResponseArgumentCaptor.capture());
+
+      assertThat(errorResponseArgumentCaptor.getValue())
+          .usingRecursiveComparison()
+          .isEqualTo(expected);
     }
   }
 
