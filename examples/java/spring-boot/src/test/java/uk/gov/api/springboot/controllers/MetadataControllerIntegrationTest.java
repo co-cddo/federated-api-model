@@ -104,17 +104,17 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void returnsCorrelationIdInResponseIfValidUuidProvided() throws Exception {
-      String uuid = UUID.randomUUID().toString();
+      String correlationId = UUID.randomUUID().toString();
       mockMvc
-          .perform(get("/apis").header("correlation-id", uuid))
-          .andExpect(header().string("correlation-id", uuid));
+          .perform(get("/apis").header("correlation-id", correlationId))
+          .andExpect(header().string("correlation-id", correlationId));
     }
 
     @Test
     void returns400IfInvalidUuidProvided() throws Exception {
-      String uuid = "invalid";
+      String correlationId = "invalid";
       mockMvc
-          .perform(get("/apis").header("correlation-id", uuid))
+          .perform(get("/apis").header("correlation-id", correlationId))
           .andExpect(status().isBadRequest())
           .andExpect(jsonPath("$.error").value("invalid_request")); // TODO
     }

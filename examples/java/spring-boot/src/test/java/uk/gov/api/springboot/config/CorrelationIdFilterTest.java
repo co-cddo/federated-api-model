@@ -46,24 +46,24 @@ class CorrelationIdFilterTest {
 
   @Test
   void validCorrelationIdIsAddedToResponse() throws ServletException, IOException {
-    String uuid = UUID.randomUUID().toString();
-    when(request.getHeader("correlation-id")).thenReturn(uuid);
+    String correlationId = UUID.randomUUID().toString();
+    when(request.getHeader("correlation-id")).thenReturn(correlationId);
     filter.doFilterInternal(request, response, filterChain);
 
-    verify(response).addHeader("correlation-id", uuid);
+    verify(response).addHeader("correlation-id", correlationId);
   }
 
   @Test
   void correlationIdIsAddedToResponseRegardlessOfFilterErrors()
       throws ServletException, IOException {
-    String uuid = UUID.randomUUID().toString();
-    when(request.getHeader("correlation-id")).thenReturn(uuid);
+    String correlationId = UUID.randomUUID().toString();
+    when(request.getHeader("correlation-id")).thenReturn(correlationId);
     doThrow(new IOException()).when(filterChain).doFilter(any(), any());
     assertThatThrownBy(() -> filter.doFilterInternal(request, response, filterChain))
         .isInstanceOf(IOException.class);
 
     // TODO: add correlation-id to the response in the OpenAPI spec
-    verify(response).addHeader("correlation-id", uuid);
+    verify(response).addHeader("correlation-id", correlationId);
   }
 
   @Nested
@@ -159,10 +159,10 @@ class CorrelationIdFilterTest {
         "93094CAB-21D7-43EC-97E9-566573544781",
         "93094cab-21d7-43ec-97e9-566573544781"
       })
-  void anyVersionOfUuidIsAccepted(String uuid) throws ServletException, IOException {
-    when(request.getHeader("correlation-id")).thenReturn(uuid);
+  void anyVersionOfUuidIsAccepted(String correlationId) throws ServletException, IOException {
+    when(request.getHeader("correlation-id")).thenReturn(correlationId);
     filter.doFilterInternal(request, response, filterChain);
 
-    verify(response).addHeader("correlation-id", uuid);
+    verify(response).addHeader("correlation-id", correlationId);
   }
 }
