@@ -16,7 +16,7 @@ import uk.gov.api.models.metadata.ErrorResponse;
 @Component
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
   public CorrelationIdFilter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;

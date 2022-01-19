@@ -14,35 +14,33 @@ class GlobalExceptionHandlerTest {
   @Nested
   class HandleCorrelationIdMalformedException {
 
+    private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
+
     @Test
     void returns400() {
-      var handler = new GlobalExceptionHandler();
-      ResponseEntity<ErrorResponse> response =
-          handler.handleCorrelationIdMalformedException(
-              new CorrelationIdMalformedException(), null);
+      ResponseEntity<ErrorResponse> response = setUpResponse();
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
     void returnsErrorCodeAsInvalidRequest() {
-      var handler = new GlobalExceptionHandler();
-      ResponseEntity<ErrorResponse> response =
-          handler.handleCorrelationIdMalformedException(
-              new CorrelationIdMalformedException(), null);
+      ResponseEntity<ErrorResponse> response = setUpResponse();
 
       assertThat(response.getBody().getError()).isEqualTo(ErrorResponse.Error.INVALID_REQUEST);
     }
 
     @Test
     void returnsErrorDescriptionWhenInvalidRequest() {
-      var handler = new GlobalExceptionHandler();
-      ResponseEntity<ErrorResponse> response =
-          handler.handleCorrelationIdMalformedException(
-              new CorrelationIdMalformedException(), null);
+      ResponseEntity<ErrorResponse> response = setUpResponse();
 
       assertThat(response.getBody().getErrorDescription())
           .isEqualTo("The correlation-id is not a valid UUID.");
+    }
+
+    private ResponseEntity<ErrorResponse> setUpResponse() {
+      return handler.handleCorrelationIdMalformedException(
+          new CorrelationIdMalformedException(), null);
     }
   }
 }

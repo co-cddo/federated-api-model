@@ -48,6 +48,7 @@ class CorrelationIdFilterTest {
   void validCorrelationIdIsAddedToResponse() throws ServletException, IOException {
     String correlationId = UUID.randomUUID().toString();
     when(request.getHeader("correlation-id")).thenReturn(correlationId);
+
     filter.doFilterInternal(request, response, filterChain);
 
     verify(response).addHeader("correlation-id", correlationId);
@@ -59,6 +60,7 @@ class CorrelationIdFilterTest {
     String correlationId = UUID.randomUUID().toString();
     when(request.getHeader("correlation-id")).thenReturn(correlationId);
     doThrow(new IOException()).when(filterChain).doFilter(any(), any());
+
     assertThatThrownBy(() -> filter.doFilterInternal(request, response, filterChain))
         .isInstanceOf(IOException.class);
 
@@ -70,6 +72,7 @@ class CorrelationIdFilterTest {
   class UuidIsInvalid {
 
     @Mock private PrintWriter writer;
+    @Captor private ArgumentCaptor<ErrorResponse> errorResponseArgumentCaptor;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -122,8 +125,6 @@ class CorrelationIdFilterTest {
       verify(writer).write("Serialised JSON");
     }
 
-    @Captor private ArgumentCaptor<ErrorResponse> errorResponseArgumentCaptor;
-
     @Test
     void errorResponseIsReturned() throws IOException, ServletException {
       ErrorResponse expected = new ErrorResponse();
@@ -154,6 +155,7 @@ class CorrelationIdFilterTest {
       })
   void anyVersionOfUuidIsAccepted(String correlationId) throws ServletException, IOException {
     when(request.getHeader("correlation-id")).thenReturn(correlationId);
+
     filter.doFilterInternal(request, response, filterChain);
 
     verify(response).addHeader("correlation-id", correlationId);
