@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import me.jvt.uuid.Patterns;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uk.gov.api.models.metadata.ErrorResponse;
@@ -39,8 +40,10 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
     }
     try {
       filterChain.doFilter(request, response);
+      MDC.put("correlation-id", uuid);
     } finally {
       response.addHeader("correlation-id", uuid);
+      MDC.clear();
     }
   }
 }
