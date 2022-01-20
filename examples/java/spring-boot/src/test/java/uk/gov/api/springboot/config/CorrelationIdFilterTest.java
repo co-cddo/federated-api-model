@@ -13,7 +13,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import me.jvt.uuid.Patterns;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -143,7 +142,10 @@ class CorrelationIdFilterTest {
   void uuidIsGeneratedIfNoneProvided() throws ServletException, IOException {
     filter.doFilterInternal(request, response, filterChain);
 
-    verify(response).addHeader(eq("correlation-id"), matches(Patterns.UUID_STRING)); // TODO
+    verify(response)
+        .addHeader(
+            eq("correlation-id"),
+            matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"));
   }
 
   @ParameterizedTest
