@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import me.jvt.uuid.Patterns;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,6 +19,7 @@ import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
   private final ObjectMapper objectMapper;
+  private static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdFilter.class);
 
   public CorrelationIdFilter(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
@@ -41,6 +44,7 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
       MDC.put("correlation-id", correlationId);
+      LOGGER.info("A request was sent with correlation-id " + correlationId);
     } finally {
       response.addHeader("correlation-id", correlationId);
       MDC.clear();

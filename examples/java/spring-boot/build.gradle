@@ -18,6 +18,7 @@ dependencies {
   implementation 'me.jvt.uuid:uuid-core:0.7.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.rest-assured:json-schema-validator:4.4.0'
+  testImplementation 'com.github.valfirst:slf4j-test:2.4.1'
 }
 
 task copySchemas(type: Copy) {

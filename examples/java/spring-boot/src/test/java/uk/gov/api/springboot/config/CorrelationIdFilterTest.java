@@ -1,6 +1,7 @@
 package uk.gov.api.springboot.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static com.github.valfirst.slf4jtest.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -8,11 +9,17 @@ import static org.mockito.Mockito.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.github.valfirst.slf4jtest.LoggingEvent;
+import com.github.valfirst.slf4jtest.TestLogger;
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,6 +32,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.org.lidalia.slf4jext.Level;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
 @ExtendWith(MockitoExtension.class)
@@ -136,6 +144,29 @@ class CorrelationIdFilterTest {
           .usingRecursiveComparison()
           .isEqualTo(expected);
     }
+  }
+
+  @Nested
+  class Log {
+
+    private final TestLogger logger = TestLoggerFactory.getTestLogger(CorrelationIdFilter.class);
+
+    @AfterEach
+    void tearDown() {
+      logger.clear();
+    }
+
+    @Test
+    void infoMessageIfFilterApplied() throws ServletException, IOException {
+      String correlationId = "93094CAB-21D7-13EC-97E9-566573544781";
+      when(request.getHeader("correlation-id")).thenReturn(correlationId);
+
+      filter.doFilterInternal(request, response, filterChain);
+
+      assertThat(logger).hasLogged(LoggingEvent.info(Map.of("correlation-id", correlationId), "A request was sent with correlation-id 93094CAB-21D7-13EC-97E9-566573544781"));
+    }
+
+
   }
 
   @Test
