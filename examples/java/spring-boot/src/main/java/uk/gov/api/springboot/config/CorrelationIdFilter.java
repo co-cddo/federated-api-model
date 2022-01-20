@@ -11,7 +11,7 @@ import me.jvt.uuid.Patterns;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uk.gov.api.models.metadata.ErrorResponse;
+import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
 @Component
 public class CorrelationIdFilter extends OncePerRequestFilter {

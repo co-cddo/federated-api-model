@@ -25,7 +25,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.models.metadata.ErrorResponse;
+import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
 @ExtendWith(MockitoExtension.class)
 class CorrelationIdFilterTest {
