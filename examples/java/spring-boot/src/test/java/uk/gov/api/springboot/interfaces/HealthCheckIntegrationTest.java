@@ -1,4 +1,4 @@
-package uk.gov.api.springboot;
+package uk.gov.api.springboot.interfaces;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

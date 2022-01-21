@@ -11,6 +11,7 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.EvaluationResult;
 import org.jmolecules.archunit.JMoleculesArchitectureRules;
+import org.junit.jupiter.api.Nested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,10 +57,24 @@ class JMoleculesRulesTest {
           .resideInAPackage("..interfaces..");
 
   @ArchTest
+  ArchRule alwaysFinalFields =
+      classes()
+          .that()
+          .haveNameNotMatching(".*Test")
+          .and()
+          .areNotAnnotatedWith(Nested.class)
+          .and()
+          .haveNameNotMatching(".*Dao")
+          .and()
+          .resideOutsideOfPackage("..interfaces..")
+          .should()
+          .haveOnlyFinalFields();
+
+  @ArchTest
   ArchRule no =
       classes()
           .that()
-          .haveNameNotMatching(".*Test.*")
+          .haveNameNotMatching(".*Test")
           .and()
           .areTopLevelClasses()
           .and()
