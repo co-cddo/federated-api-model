@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.services;
+package uk.gov.api.springboot.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
-import uk.gov.api.springboot.daos.MetadataDao;
-import uk.gov.api.springboot.repositories.MetadataRepository;
+import uk.gov.api.interfaces.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.springboot.domain.models.MetadataDao;
+import uk.gov.api.springboot.infrastructure.MetadataRepository;
 
 @ExtendWith(MockitoExtension.class)
 class MetadataServiceTest {

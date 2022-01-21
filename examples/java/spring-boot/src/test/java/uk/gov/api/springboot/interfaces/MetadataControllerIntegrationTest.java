@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.controllers;
+package uk.gov.api.springboot.interfaces;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,9 +20,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
-import uk.gov.api.models.metadata.v1alpha.Data;
-import uk.gov.api.springboot.services.MetadataService;
+import uk.gov.api.interfaces.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.interfaces.metadata.v1alpha.Data;
+import uk.gov.api.springboot.application.MetadataService;
 
 @AutoConfigureMockMvc
 @WebMvcTest(MetadataController.class)

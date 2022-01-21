@@ -1,9 +1,9 @@
-package uk.gov.api.springboot.repositories;
+package uk.gov.api.springboot.infrastructure;
 
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Repository;
-import uk.gov.api.springboot.daos.MetadataDao;
+import uk.gov.api.springboot.domain.models.MetadataDao;
 
 @Repository
 public class EmptyMetadataRepository implements MetadataRepository {

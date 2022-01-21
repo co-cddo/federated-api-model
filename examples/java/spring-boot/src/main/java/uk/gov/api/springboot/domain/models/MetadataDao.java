@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.daos;
+package uk.gov.api.springboot.domain.models;
 
 public class MetadataDao {
 

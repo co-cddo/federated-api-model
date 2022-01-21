@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.controllers;
+package uk.gov.api.springboot.interfaces;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -10,9 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
-import uk.gov.api.models.metadata.v1alpha.BulkMetadataResponse;
-import uk.gov.api.springboot.services.MetadataService;
+import uk.gov.api.interfaces.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.interfaces.metadata.v1alpha.BulkMetadataResponse;
+import uk.gov.api.springboot.application.MetadataService;
 
 @ExtendWith(MockitoExtension.class)
 class MetadataControllerTest {

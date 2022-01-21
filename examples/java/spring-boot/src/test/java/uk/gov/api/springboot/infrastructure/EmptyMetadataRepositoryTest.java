@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.repositories;
+package uk.gov.api.springboot.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
