@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import me.jvt.uuid.Patterns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
@@ -19,10 +18,12 @@ import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 public class CorrelationIdFilter extends OncePerRequestFilter {
 
   private final ObjectMapper objectMapper;
+  private final MdcFacade mdcFacade;
   private static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdFilter.class);
 
-  public CorrelationIdFilter(ObjectMapper objectMapper) {
+  public CorrelationIdFilter(ObjectMapper objectMapper, MdcFacade mdcFacade) {
     this.objectMapper = objectMapper;
+    this.mdcFacade = mdcFacade;
   }
 
   @Override
@@ -42,12 +43,12 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
       response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
     try {
+      mdcFacade.put("correlation-id", correlationId);
       filterChain.doFilter(request, response);
-      MDC.put("correlation-id", correlationId);
       LOGGER.info("A request was sent with correlation-id " + correlationId);
     } finally {
       response.addHeader("correlation-id", correlationId);
-      MDC.clear();
+      mdcFacade.clear();
     }
   }
 }

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -28,6 +29,7 @@ import uk.gov.api.springboot.services.MetadataService;
 @AutoConfigureMockMvc
 @WebMvcTest(MetadataController.class)
 @ExtendWith(SpringExtension.class)
+@ComponentScan("uk.gov.api.springboot.config")
 class MetadataControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;

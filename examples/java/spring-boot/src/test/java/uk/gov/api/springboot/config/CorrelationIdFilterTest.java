@@ -1,24 +1,20 @@
 package uk.gov.api.springboot.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.github.valfirst.slf4jtest.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.valfirst.slf4jtest.TestLogger;
+import com.github.valfirst.slf4jtest.TestLoggerFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.github.valfirst.slf4jtest.LoggingEvent;
-import com.github.valfirst.slf4jtest.TestLogger;
-import com.github.valfirst.slf4jtest.TestLoggerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -27,12 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.org.lidalia.slf4jext.Level;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +34,7 @@ class CorrelationIdFilterTest {
   @Mock private HttpServletResponse response;
   @Mock private FilterChain filterChain;
   @Mock private ObjectMapper mapper;
+  @Mock private MdcFacade mdcFacade;
   @InjectMocks private CorrelationIdFilter filter;
 
   @Test
@@ -119,20 +112,6 @@ class CorrelationIdFilterTest {
     }
 
     @Test
-    void responseBodyIsAdded(@Mock PrintWriter writer, @Mock ObjectMapper mapper)
-        throws ServletException, IOException {
-      String correlationId = "invalid";
-      CorrelationIdFilter filter = new CorrelationIdFilter(mapper);
-      when(request.getHeader("correlation-id")).thenReturn(correlationId);
-      when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
-      when(response.getWriter()).thenReturn(writer);
-
-      filter.doFilterInternal(request, response, filterChain);
-
-      verify(writer).write("Serialised JSON");
-    }
-
-    @Test
     void errorResponseIsReturned() throws IOException, ServletException {
       ErrorResponse expected = new ErrorResponse();
       expected.setError(ErrorResponse.Error.INVALID_REQUEST);
@@ -157,16 +136,17 @@ class CorrelationIdFilterTest {
     }
 
     @Test
-    void infoMessageIfFilterApplied() throws ServletException, IOException {
+    void correlationIdIsAddedToMdcBeforeFilterChainContinues()
+        throws ServletException, IOException {
       String correlationId = "93094CAB-21D7-13EC-97E9-566573544781";
       when(request.getHeader("correlation-id")).thenReturn(correlationId);
 
       filter.doFilterInternal(request, response, filterChain);
 
-      assertThat(logger).hasLogged(LoggingEvent.info(Map.of("correlation-id", correlationId), "A request was sent with correlation-id 93094CAB-21D7-13EC-97E9-566573544781"));
+      InOrder inOrder = inOrder(mdcFacade, filterChain);
+      inOrder.verify(mdcFacade).put("correlation-id", correlationId);
+      inOrder.verify(filterChain).doFilter(request, response);
     }
-
-
   }
 
   @Test
