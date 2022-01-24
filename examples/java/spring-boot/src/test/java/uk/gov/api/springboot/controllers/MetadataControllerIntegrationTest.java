@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.models.metadata.v1alpha.Data;
+import uk.gov.api.springboot.dtos.MetadataDto;
+import uk.gov.api.springboot.mappers.V1AlphaMapper;
 import uk.gov.api.springboot.services.MetadataService;
 
 @AutoConfigureMockMvc
@@ -32,6 +34,7 @@ class MetadataControllerIntegrationTest {
   @Autowired private MockMvc mockMvc;
 
   @MockBean private MetadataService service;
+  @MockBean private V1AlphaMapper v1AlphaMapper;
 
   @Nested
   class RetrieveAll {
@@ -43,16 +46,13 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void mockDataIsReturned() throws Exception {
-      var apiMetadata1 = new ApiMetadata();
-      var data1 = new Data();
-      data1.setName("API 1");
-      apiMetadata1.setData(data1);
-      var apiMetadata2 = new ApiMetadata();
-      var data2 = new Data();
-      data2.setName("API 2");
-      apiMetadata2.setData(data2);
-
-      when(service.retrieveAll()).thenReturn(List.of(apiMetadata1, apiMetadata2));
+      var dto1 = validDto("API 1");
+      var dto2 = validDto("API 2");
+      var response1 = validApiMetadata("API 1");
+      var response2 = validApiMetadata("API 2");
+      when(service.retrieveAll()).thenReturn(List.of(dto1, dto2));
+      when(v1AlphaMapper.convert(dto1)).thenReturn(response1);
+      when(v1AlphaMapper.convert(dto2)).thenReturn(response2);
 
       mockMvc
           .perform(get("/apis"))
@@ -62,7 +62,10 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void returnsResponseValidatesAgainstSchema() throws Exception {
-      when(service.retrieveAll()).thenReturn(List.of(validObject()));
+      when(service.retrieveAll()).thenReturn(List.of(validDto()));
+      var dto = validDto();
+      var response = validApiMetadata();
+      when(v1AlphaMapper.convert(dto)).thenReturn(response);
 
       mockMvc
           .perform(get("/apis"))
@@ -107,11 +110,30 @@ class MetadataControllerIntegrationTest {
     }
   }
 
-  private static ApiMetadata validObject() {
+  private static MetadataDto validDto() {
+    return validDto("Name");
+  }
+
+  private static MetadataDto validDto(String name) {
+    return new MetadataDto(
+        "api.gov.uk/v1alpha",
+        name,
+        "the API description",
+        "https://api-endpoint.example",
+        "contact@email",
+        "The Org",
+        "https://docs.example");
+  }
+
+  private static ApiMetadata validApiMetadata() {
+    return validApiMetadata("Name");
+  }
+
+  private static ApiMetadata validApiMetadata(String name) {
     var apiMetadata = new ApiMetadata();
     apiMetadata.setApiVersion(ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
     var data = new Data();
-    data.setName("Name");
+    data.setName(name);
     data.setContact("contact@email");
     data.setDescription("the API description");
     data.setOrganisation("The Org");
