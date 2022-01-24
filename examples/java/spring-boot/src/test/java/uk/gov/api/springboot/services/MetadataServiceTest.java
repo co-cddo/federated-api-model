@@ -3,7 +3,6 @@ package uk.gov.api.springboot.services;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.springboot.daos.MetadataDao;
+import uk.gov.api.springboot.dtos.MetadataDto;
 import uk.gov.api.springboot.repositories.MetadataRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,12 +25,12 @@ class MetadataServiceTest {
     @Mock private MetadataRepository repository;
 
     @Test
-    void returnsListOfApiMetadata() {
+    void returnsListOfMetadataDto() {
       when(repository.findAll()).thenReturn(List.of(getMetadataDao()));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
-      assertThat(actual).hasOnlyElementsOfType(ApiMetadata.class);
+      assertThat(actual).hasOnlyElementsOfType(MetadataDto.class);
     }
 
     @Test
@@ -39,10 +38,10 @@ class MetadataServiceTest {
       var dao = getMetadataDao();
       when(repository.findAll()).thenReturn(List.of(dao));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(1);
-      assertApiVersion(actual.get(0), ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
+      assertApiVersion(actual.get(0), "api.gov.uk/v1alpha");
     }
 
     @Test
@@ -55,7 +54,7 @@ class MetadataServiceTest {
       dao3.setName("name 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertName(actual.get(0), "name 1");
@@ -73,7 +72,7 @@ class MetadataServiceTest {
       dao3.setDescription("description 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertDescription(actual.get(0), "description 1");
@@ -93,7 +92,7 @@ class MetadataServiceTest {
       dao3.setApiVersion("api.gov.uk/v1alpha");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertUrl(actual.get(0), "https://www.example.foo");
@@ -111,7 +110,7 @@ class MetadataServiceTest {
       dao3.setContact("contact 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertContact(actual.get(0), "contact 1");
@@ -129,7 +128,7 @@ class MetadataServiceTest {
       dao3.setOrganisation("org 3");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertOrganisation(actual.get(0), "org 1");
@@ -147,7 +146,7 @@ class MetadataServiceTest {
       dao3.setDocumentationUrl("https://www.exampledocs.baz");
       when(repository.findAll()).thenReturn(List.of(dao1, dao2, dao3));
 
-      List<ApiMetadata> actual = service.retrieveAll();
+      List<MetadataDto> actual = service.retrieveAll();
 
       assertThat(actual).hasSize(3);
       assertDocumentationUrl(actual.get(0), "https://www.exampledocs.foo");
@@ -163,33 +162,32 @@ class MetadataServiceTest {
       return dao;
     }
 
-    private void assertApiVersion(ApiMetadata apiMetadata, ApiMetadata.ApiVersion apiVersion) {
-      assertThat(apiMetadata.getApiVersion()).isEqualTo(apiVersion);
+    private void assertApiVersion(MetadataDto metadataDto, String apiVersion) {
+      assertThat(metadataDto.apiVersion()).isEqualTo(apiVersion);
     }
 
-    private void assertName(ApiMetadata apiMetadata, String name) {
-      assertThat(apiMetadata.getData().getName()).isEqualTo(name);
+    private void assertName(MetadataDto metadataDto, String name) {
+      assertThat(metadataDto.name()).isEqualTo(name);
     }
 
-    private void assertDescription(ApiMetadata apiMetadata, String description) {
-      assertThat(apiMetadata.getData().getDescription()).isEqualTo(description);
+    private void assertDescription(MetadataDto metadataDto, String description) {
+      assertThat(metadataDto.description()).isEqualTo(description);
     }
 
-    private void assertUrl(ApiMetadata apiMetadata, String url) {
-      assertThat(apiMetadata.getData().getUrl()).isEqualTo(URI.create(url));
+    private void assertUrl(MetadataDto metadataDto, String url) {
+      assertThat(metadataDto.url()).isEqualTo(url);
     }
 
-    private void assertContact(ApiMetadata apiMetadata, String contact) {
-      assertThat(apiMetadata.getData().getContact()).isEqualTo(contact);
+    private void assertContact(MetadataDto metadataDto, String contact) {
+      assertThat(metadataDto.contact()).isEqualTo(contact);
     }
 
-    private void assertOrganisation(ApiMetadata apiMetadata, String organisation) {
-      assertThat(apiMetadata.getData().getOrganisation()).isEqualTo(organisation);
+    private void assertOrganisation(MetadataDto metadataDto, String organisation) {
+      assertThat(metadataDto.organisation()).isEqualTo(organisation);
     }
 
-    private void assertDocumentationUrl(ApiMetadata apiMetadata, String documentationUrl) {
-      assertThat(apiMetadata.getData().getDocumentationUrl())
-          .isEqualTo(URI.create(documentationUrl));
+    private void assertDocumentationUrl(MetadataDto metadataDto, String documentationUrl) {
+      assertThat(metadataDto.documentationUrl()).isEqualTo(documentationUrl);
     }
   }
 }
