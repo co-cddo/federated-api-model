@@ -12,11 +12,14 @@ apply plugin: 'jsonschema2pojo'
 
 dependencies {
   implementation 'org.apache.logging.log4j:log4j-layout-template-json'
+  implementation 'org.jmolecules:jmolecules-ddd:1.4.0'
+  implementation 'org.jmolecules:jmolecules-layered-architecture:1.4.0'
   implementation 'org.springframework.boot:spring-boot-starter-log4j2'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   testImplementation 'com.tngtech.archunit:archunit:0.22.0'
   testImplementation 'com.tngtech.archunit:archunit-junit5:0.22.0'
+  testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.8.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.rest-assured:json-schema-validator:4.5.0'
 }
