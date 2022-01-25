@@ -39,7 +39,7 @@ class CorrelationIdFilterTest {
   @Mock private FilterChain filterChain;
   @Mock private ObjectMapper mapper;
   @Mock private MdcFacade mdcFacade;
-  @Mock private ContentNegotiationFacade contentNegotiationFacade;
+  @Mock private ContentNegotiationFacadeImpl contentNegotiationFacade;
   @Mock private PrintWriter writer;
   @Mock private ContentTypeNegotiator contentTypeNegotiator;
   @InjectMocks private CorrelationIdFilter filter;

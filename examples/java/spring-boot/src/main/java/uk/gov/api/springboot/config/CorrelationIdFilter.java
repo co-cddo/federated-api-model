@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
@@ -22,11 +23,11 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
 
   private final ObjectMapper objectMapper;
   private final MdcFacade mdcFacade;
-  private final ContentNegotiationFacade contentNegotiationFacade;
+  private final ContentNegotiationFacadeImpl contentNegotiationFacade;
   private final ContentTypeNegotiator contentTypeNegotiator;
   private static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdFilter.class);
 
-  public CorrelationIdFilter(ObjectMapper objectMapper, MdcFacade mdcFacade, ContentNegotiationFacade contentNegotiationFacade, ContentTypeNegotiator contentTypeNegotiator) {
+  public CorrelationIdFilter(ObjectMapper objectMapper, MdcFacade mdcFacade, ContentNegotiationFacadeImpl contentNegotiationFacade, ContentTypeNegotiator contentTypeNegotiator) {
     this.objectMapper = objectMapper;
     this.mdcFacade = mdcFacade;
     this.contentNegotiationFacade = contentNegotiationFacade;
@@ -42,18 +43,24 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
       correlationId = UUID.randomUUID().toString();
     }
     if (!correlationId.matches(Patterns.UUID_STRING)) {
-      if(MediaType.APPLICATION_PDF.equals(contentNegotiationFacade.negotiate(request, contentTypeNegotiator))) {
+      try {
+        contentNegotiationFacade.negotiate(request, contentTypeNegotiator);
+      } catch (HttpMediaTypeNotAcceptableException e) {
         response.setStatus(406);
         return;
-      } else {
-        response.setStatus(400);
-        response.setContentType("application/vnd.uk.gov.api.v1alpha+json");
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setError(ErrorResponse.Error.INVALID_REQUEST);
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-        return;
       }
+//      if(MediaType.APPLICATION_PDF.equals(contentNegotiationFacade.negotiate(request, contentTypeNegotiator))) {
+//        response.setStatus(406);
+//        return;
+//      } else {
+      response.setStatus(400);
+      response.setContentType("application/vnd.uk.gov.api.v1alpha+json");
+
+      ErrorResponse errorResponse = new ErrorResponse();
+      errorResponse.setError(ErrorResponse.Error.INVALID_REQUEST);
+      response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+      return;
+//      }
     }
     try {
       mdcFacade.put("correlation-id", correlationId);
