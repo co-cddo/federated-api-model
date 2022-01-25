@@ -15,6 +15,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import me.jvt.contentnegotiation.ContentTypeNegotiator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +27,8 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +39,9 @@ class CorrelationIdFilterTest {
   @Mock private FilterChain filterChain;
   @Mock private ObjectMapper mapper;
   @Mock private MdcFacade mdcFacade;
+  @Mock private ContentNegotiationFacade contentNegotiationFacade;
+  @Mock private PrintWriter writer;
+  @Mock private ContentTypeNegotiator contentTypeNegotiator;
   @InjectMocks private CorrelationIdFilter filter;
 
   @Test
@@ -71,57 +78,108 @@ class CorrelationIdFilterTest {
   @Nested
   class UuidIsInvalid {
 
-    @Mock private PrintWriter writer;
-    @Captor private ArgumentCaptor<ErrorResponse> errorResponseArgumentCaptor;
-
-    @BeforeEach
-    void setUp() throws IOException {
-      when(response.getWriter()).thenReturn(writer);
-    }
-
     private void runFilter(String correlationId) throws ServletException, IOException {
       when(request.getHeader("correlation-id")).thenReturn(correlationId);
       filter.doFilterInternal(request, response, filterChain);
     }
 
-    @ParameterizedTest
-    @EmptySource
-    @ValueSource(strings = {"invalid"})
-    void aBadRequestIsReturned(String correlationId) throws ServletException, IOException {
-      runFilter(correlationId);
+    @Nested
+    class NegotiationPasses {
 
-      verify(response).setStatus(400);
+      @Captor private ArgumentCaptor<ErrorResponse> errorResponseArgumentCaptor;
+
+      @BeforeEach
+      void setUp() throws IOException {
+        when(response.getWriter()).thenReturn(writer);
+      }
+
+      @ParameterizedTest
+      @EmptySource
+      @ValueSource(strings = {"invalid"})
+      void aBadRequestIsReturned(String correlationId) throws ServletException, IOException {
+        runFilter(correlationId);
+
+        verify(response).setStatus(400);
+      }
+
+      @Test
+      void contentTypeIsV1AlphaJson() throws ServletException, IOException {
+        String correlationId = "invalid";
+        runFilter(correlationId);
+
+        verify(response).setContentType("application/vnd.uk.gov.api.v1alpha+json");
+      }
+
+      @Test
+      void responseBodyIsAdded() throws ServletException, IOException {
+        String correlationId = "invalid";
+        when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
+        when(response.getWriter()).thenReturn(writer);
+        runFilter(correlationId);
+
+        verify(writer).write("Serialised JSON");
+      }
+
+      @Test
+      void errorResponseIsReturned() throws IOException, ServletException {
+        ErrorResponse expected = new ErrorResponse();
+        expected.setError(ErrorResponse.Error.INVALID_REQUEST);
+
+        runFilter("");
+        verify(mapper).writeValueAsString(errorResponseArgumentCaptor.capture());
+
+        assertThat(errorResponseArgumentCaptor.getValue())
+            .usingRecursiveComparison()
+            .isEqualTo(expected);
+      }
+
+      @Test
+      void filterChainIsNotCalled() throws ServletException, IOException {
+        runFilter("");
+
+        verifyNoInteractions(filterChain);
+      }
     }
 
-    @Test
-    void contentTypeIsV1AlphaJson() throws ServletException, IOException {
-      String correlationId = "invalid";
-      runFilter(correlationId);
+    @Nested
+    class NegotiationFails {
 
-      verify(response).setContentType("application/vnd.uk.gov.api.v1alpha+json");
-    }
+      @Test
+      void returnsNotAcceptable() throws ServletException, IOException {
+        when(contentNegotiationFacade.negotiate(any(), any())).thenThrow(new HttpMediaTypeNotAcceptableException(""));
 
-    @Test
-    void responseBodyIsAdded() throws ServletException, IOException {
-      String correlationId = "invalid";
-      when(mapper.writeValueAsString(any())).thenReturn("Serialised JSON");
-      when(response.getWriter()).thenReturn(writer);
-      runFilter(correlationId);
+        runFilter("");
 
-      verify(writer).write("Serialised JSON");
-    }
+        verify(response).setStatus(406);
+      }
 
-    @Test
-    void errorResponseIsReturned() throws IOException, ServletException {
-      ErrorResponse expected = new ErrorResponse();
-      expected.setError(ErrorResponse.Error.INVALID_REQUEST);
+      @Test
+      void doesNotSendABody() throws ServletException, IOException {
+        when(contentNegotiationFacade.negotiate(any(), any())).thenThrow(new HttpMediaTypeNotAcceptableException(""));
 
-      runFilter("");
-      verify(mapper).writeValueAsString(errorResponseArgumentCaptor.capture());
+        runFilter("");
 
-      assertThat(errorResponseArgumentCaptor.getValue())
-          .usingRecursiveComparison()
-          .isEqualTo(expected);
+        verifyNoInteractions(writer);
+      }
+
+      @Test
+      void contentTypeIsNotSet() throws ServletException, IOException {
+        when(contentNegotiationFacade.negotiate(any(), any())).thenThrow(new HttpMediaTypeNotAcceptableException(""));
+
+        runFilter("");
+
+        verify(response, times(0)).setContentType(any());
+      }
+
+      @Test
+      void filterChainIsNotCalled() throws ServletException, IOException {
+        when(contentNegotiationFacade.negotiate(any(), any())).thenThrow(new HttpMediaTypeNotAcceptableException(""));
+
+        runFilter("");
+
+        verifyNoInteractions(filterChain);
+      }
+
     }
   }
 
@@ -173,4 +231,5 @@ class CorrelationIdFilterTest {
 
     verify(response).addHeader("correlation-id", correlationId);
   }
+
 }

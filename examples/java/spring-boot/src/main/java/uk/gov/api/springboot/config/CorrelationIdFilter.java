@@ -7,9 +7,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import me.jvt.contentnegotiation.ContentTypeNegotiator;
 import me.jvt.uuid.Patterns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uk.gov.api.models.metadata.v1alpha.ErrorResponse;
@@ -19,11 +22,15 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
 
   private final ObjectMapper objectMapper;
   private final MdcFacade mdcFacade;
+  private final ContentNegotiationFacade contentNegotiationFacade;
+  private final ContentTypeNegotiator contentTypeNegotiator;
   private static final Logger LOGGER = LoggerFactory.getLogger(CorrelationIdFilter.class);
 
-  public CorrelationIdFilter(ObjectMapper objectMapper, MdcFacade mdcFacade) {
+  public CorrelationIdFilter(ObjectMapper objectMapper, MdcFacade mdcFacade, ContentNegotiationFacade contentNegotiationFacade, ContentTypeNegotiator contentTypeNegotiator) {
     this.objectMapper = objectMapper;
     this.mdcFacade = mdcFacade;
+    this.contentNegotiationFacade = contentNegotiationFacade;
+    this.contentTypeNegotiator = contentTypeNegotiator;
   }
 
   @Override
@@ -35,12 +42,18 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
       correlationId = UUID.randomUUID().toString();
     }
     if (!correlationId.matches(Patterns.UUID_STRING)) {
-      response.setStatus(400);
-      response.setContentType("application/vnd.uk.gov.api.v1alpha+json");
+      if(MediaType.APPLICATION_PDF.equals(contentNegotiationFacade.negotiate(request, contentTypeNegotiator))) {
+        response.setStatus(406);
+        return;
+      } else {
+        response.setStatus(400);
+        response.setContentType("application/vnd.uk.gov.api.v1alpha+json");
 
-      ErrorResponse errorResponse = new ErrorResponse();
-      errorResponse.setError(ErrorResponse.Error.INVALID_REQUEST);
-      response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setError(ErrorResponse.Error.INVALID_REQUEST);
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        return;
+      }
     }
     try {
       mdcFacade.put("correlation-id", correlationId);
