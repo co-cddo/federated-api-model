@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.controllers;
+package uk.gov.api.springboot.interfaces.controllers;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
