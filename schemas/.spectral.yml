@@ -1,3 +1,4 @@
-extends: spectral:oas
+extends:
+  - '@govuk-data-standards/spectral-ruleset-govuk-public'
 formats:
   - "oas3.1"
