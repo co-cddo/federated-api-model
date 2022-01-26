@@ -16,4 +16,4 @@ paths:
           content:
             application/vnd.uk.gov.api.v1alpha+json:
               schema:
-                $ref: 'v1alpha/bulk-metadata-response.json'
+                $ref: './bulk-metadata-response.json'
