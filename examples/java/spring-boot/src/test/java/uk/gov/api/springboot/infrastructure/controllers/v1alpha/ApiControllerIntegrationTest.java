@@ -10,7 +10,6 @@ import java.util.List;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.api.springboot.application.services.ApiService;
@@ -37,7 +35,6 @@ import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.Data;
         @ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = CorrelationIdFilter.class))
-@ExtendWith(SpringExtension.class)
 class ApiControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
