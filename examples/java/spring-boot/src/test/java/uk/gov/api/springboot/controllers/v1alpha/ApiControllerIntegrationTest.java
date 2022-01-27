@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.controllers;
+package uk.gov.api.springboot.controllers.v1alpha;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
