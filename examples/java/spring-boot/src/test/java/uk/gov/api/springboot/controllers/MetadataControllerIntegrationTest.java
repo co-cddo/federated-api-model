@@ -121,6 +121,17 @@ class MetadataControllerIntegrationTest {
           .andExpect(jsonPath("$.error").value("invalid_request"));
     }
 
+    @Test
+    void matchesSchemaWhenInvalidCorrelationIdIsProvided() throws Exception {
+      mockMvc
+          .perform(get("/apis").header("correlation-id", "not-valid"))
+          .andExpect(
+              content()
+                  .string(
+                      JsonSchemaValidator.matchesJsonSchemaInClasspath(
+                          "schemas/v1alpha/error-response.json")));
+    }
+
     private void assertContentTypeIsCorrect(ResultActions resultActions) throws Exception {
       resultActions.andExpect(
           header().string("content-type", "application/vnd.uk.gov.api.v1alpha+json"));
