@@ -33,8 +33,11 @@ public class ErrorResponseDecorator {
    * @param request the {@link HttpServletRequest} which provides information of requested client
    *     {@link MediaType}s
    * @param response the {@link HttpServletResponse} to decorate
+   * @param errorDescription the error description that will be returned to the caller, if
+   *     appropriate
    */
-  public void decorateWithNegotiation(HttpServletRequest request, HttpServletResponse response)
+  public void decorateWithNegotiation(
+      HttpServletRequest request, HttpServletResponse response, String errorDescription)
       throws IOException {
     MediaType negotiated;
     try {
@@ -49,6 +52,7 @@ public class ErrorResponseDecorator {
       response.setContentType(negotiated.toString());
       ErrorResponse error = new ErrorResponse();
       error.setError(ErrorResponse.Error.INVALID_REQUEST);
+      error.setErrorDescription(errorDescription);
       response.getWriter().write(objectMapper.writeValueAsString(error));
     } else {
       throw new IllegalStateException(

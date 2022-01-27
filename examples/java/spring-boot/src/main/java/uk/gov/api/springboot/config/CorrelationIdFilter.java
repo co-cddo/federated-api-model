@@ -39,7 +39,10 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
       correlationId = UUID.randomUUID().toString();
     }
     if (!correlationId.matches(Patterns.UUID_STRING)) {
-      errorResponseDecorator.decorateWithNegotiation(request, response);
+      errorResponseDecorator.decorateWithNegotiation(
+          request,
+          response,
+          "The value provided in the `correlation-id` header was expected to be a UUID format, but was not provided in a valid format");
       return;
       //      ErrorResponseDecorator decorator;
       //      decorator.decorateWithNegotiation(request, response);

@@ -50,7 +50,7 @@ class ErrorResponseDecoratorTest {
         when(contentNegotiationFacade.negotiate(any(), any()))
             .thenThrow(new HttpMediaTypeNotAcceptableException(""));
 
-        decorator.decorateWithNegotiation(request, response);
+        decorator.decorateWithNegotiation(request, response, "error description");
       }
 
       @Test
@@ -101,7 +101,7 @@ class ErrorResponseDecoratorTest {
                   MediaType.valueOf("application/vnd.uk.gov.api.v1alpha+json")))
               .thenReturn(true);
 
-          decorator.decorateWithNegotiation(request, response);
+          decorator.decorateWithNegotiation(request, response, "error description");
         }
 
         @Test
@@ -123,6 +123,7 @@ class ErrorResponseDecoratorTest {
         void errorResponseIsReturned() throws IOException, ServletException {
           ErrorResponse expected = new ErrorResponse();
           expected.setError(ErrorResponse.Error.INVALID_REQUEST);
+          expected.setErrorDescription("error description");
 
           verify(mapper).writeValueAsString(errorResponseArgumentCaptor.capture());
 
@@ -143,7 +144,8 @@ class ErrorResponseDecoratorTest {
                   MediaType.valueOf("application/vnd.uk.gov.api.v1alpha+json")))
               .thenReturn(false);
 
-          assertThatThrownBy(() -> decorator.decorateWithNegotiation(request, response))
+          assertThatThrownBy(
+                  () -> decorator.decorateWithNegotiation(request, response, "error description"))
               .isInstanceOf(IllegalStateException.class)
               .hasMessage(
                   "The ErrorResponseDecorator could not handle the MediaType provided, `in/valid`");

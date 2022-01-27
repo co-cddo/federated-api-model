@@ -1,5 +1,6 @@
 package uk.gov.api.springboot.controllers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,6 +9,7 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
+import me.jvt.contentnegotiation.ContentTypeNegotiator;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,11 +21,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.models.metadata.v1alpha.Data;
+import uk.gov.api.springboot.config.ContentNegotiationFacade;
 import uk.gov.api.springboot.services.MetadataService;
 
 @AutoConfigureMockMvc
@@ -34,6 +38,8 @@ class MetadataControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
 
+  @MockBean private ContentNegotiationFacade contentNegotiationFacade;
+  @MockBean private ContentTypeNegotiator contentTypeNegotiator;
   @MockBean private MetadataService service;
 
   @Nested
@@ -114,6 +120,9 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void returns400IfInvalidUuidProvided() throws Exception {
+      when(contentNegotiationFacade.negotiate(any(), any()))
+          .thenReturn(MediaType.valueOf("application/vnd.uk.gov.api.v1alpha+json"));
+
       String correlationId = "invalid";
       mockMvc
           .perform(get("/apis").header("correlation-id", correlationId))
@@ -123,6 +132,9 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void matchesSchemaWhenInvalidCorrelationIdIsProvided() throws Exception {
+      when(contentNegotiationFacade.negotiate(any(), any()))
+          .thenReturn(MediaType.valueOf("application/vnd.uk.gov.api.v1alpha+json"));
+
       mockMvc
           .perform(get("/apis").header("correlation-id", "not-valid"))
           .andExpect(

@@ -189,7 +189,11 @@ class CorrelationIdFilterTest {
     void delegatesToDecorator() throws ServletException, IOException {
       runFilter("");
 
-      verify(decorator).decorateWithNegotiation(request, response);
+      verify(decorator)
+          .decorateWithNegotiation(
+              request,
+              response,
+              "The value provided in the `correlation-id` header was expected to be a UUID format, but was not provided in a valid format");
     }
 
     @Test
