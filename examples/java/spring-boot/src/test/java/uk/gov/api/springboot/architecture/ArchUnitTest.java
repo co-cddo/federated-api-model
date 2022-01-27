@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 class ArchUnitTest {
   @ArchTest
   @SuppressWarnings("unused")
-  ArchRule requireFinalFields =
-      classesThatAreNotTests().and().haveNameNotMatching(".*Dao").should().haveOnlyFinalFields();
+  ArchRule requireFinalFields = classesThatAreNotTests().should().haveOnlyFinalFields();
 
   @ArchTest
   @SuppressWarnings("unused")

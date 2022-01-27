@@ -15,6 +15,6 @@ public class MetadataService {
   }
 
   public List<MetadataDto> retrieveAll() {
-    return repository.findAll().stream().map(MetadataDto::of).toList();
+    return repository.findAll();
   }
 }
