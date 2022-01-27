@@ -72,4 +72,14 @@ class ArchitectureLayeringTest {
                   "are instances of `MockMvc`", f -> f.getRawType().isEquivalentTo(MockMvc.class)))
           .should()
           .resideInAPackage(INFRASTRUCTURE_RING);
+
+  @ArchTest
+  @SuppressWarnings("unused")
+  private final ArchRule domainRingIsSelfSufficient =
+      classes()
+          .that()
+          .resideInAPackage(DOMAIN_RING)
+          .should()
+          .onlyAccessClassesThat()
+          .resideInAnyPackage(DOMAIN_RING, "java..");
 }
