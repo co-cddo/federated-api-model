@@ -15,7 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 class ArchUnitTest {
   @ArchTest
   @SuppressWarnings("unused")
-  ArchRule requireFinalFields = classesThatAreNotTests().should().haveOnlyFinalFields();
+  ArchRule requireFinalFields =
+      classesThatAreNotTests()
+          .and()
+          .resideOutsideOfPackage("uk.gov.api.springboot.infrastructure.models.metadata..")
+          .should()
+          .haveOnlyFinalFields();
 
   @ArchTest
   @SuppressWarnings("unused")
