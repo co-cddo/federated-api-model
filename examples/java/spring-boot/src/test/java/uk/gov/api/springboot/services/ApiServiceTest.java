@@ -10,26 +10,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.api.springboot.dtos.MetadataDto;
-import uk.gov.api.springboot.repositories.MetadataRepository;
+import uk.gov.api.springboot.dtos.Api;
+import uk.gov.api.springboot.repositories.ApiRepository;
 
 @ExtendWith(MockitoExtension.class)
-class MetadataServiceTest {
+class ApiServiceTest {
 
   @Nested
   class RetrieveAll {
 
-    @InjectMocks private MetadataService service;
+    @InjectMocks private ApiService service;
 
-    @Mock private MetadataRepository repository;
+    @Mock private ApiRepository repository;
 
     @Test
-    void delegates(@Mock List<MetadataDto> metadataDtos) {
-      when(repository.findAll()).thenReturn(metadataDtos);
+    void delegates(@Mock List<Api> apis) {
+      when(repository.findAll()).thenReturn(apis);
 
-      List<MetadataDto> actual = service.retrieveAll();
+      List<Api> actual = service.retrieveAll();
 
-      assertThat(actual).isEqualTo(metadataDtos);
+      assertThat(actual).isEqualTo(apis);
     }
   }
 }

@@ -12,28 +12,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.models.metadata.v1alpha.BulkMetadataResponse;
-import uk.gov.api.springboot.dtos.MetadataDto;
+import uk.gov.api.springboot.dtos.Api;
 import uk.gov.api.springboot.mappers.V1AlphaMapper;
-import uk.gov.api.springboot.services.MetadataService;
+import uk.gov.api.springboot.services.ApiService;
 
 @ExtendWith(MockitoExtension.class)
-class MetadataControllerTest {
+class ApiControllerTest {
 
   @Nested
   class RetrieveAll {
 
-    @Mock private MetadataService service;
+    @Mock private ApiService service;
     @Mock private V1AlphaMapper v1AlphaMapper;
 
-    @InjectMocks private MetadataController controller;
+    @InjectMocks private ApiController controller;
 
     @Test
     void returnsListOfApiMetadata(@Mock ApiMetadata metadata1, @Mock ApiMetadata metadata2) {
-      MetadataDto dto1 = new MetadataDto("v1", null, null, null, null, null, null);
-      MetadataDto dto2 = new MetadataDto("v2", null, null, null, null, null, null);
-      when(service.retrieveAll()).thenReturn(List.of(dto1, dto2));
-      when(v1AlphaMapper.convert(dto1)).thenReturn(metadata1);
-      when(v1AlphaMapper.convert(dto2)).thenReturn(metadata2);
+      Api api1 = new Api("v1", null, null, null, null, null, null);
+      Api api2 = new Api("v2", null, null, null, null, null, null);
+      when(service.retrieveAll()).thenReturn(List.of(api1, api2));
+      when(v1AlphaMapper.convert(api1)).thenReturn(metadata1);
+      when(v1AlphaMapper.convert(api2)).thenReturn(metadata2);
 
       BulkMetadataResponse actual = controller.retrieveAll();
 

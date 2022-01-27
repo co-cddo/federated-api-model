@@ -1,6 +1,7 @@
 package uk.gov.api.springboot.dtos;
 
-public record MetadataDto(
+/** Domain object for API (metadata) objects. */
+public record Api(
     String apiVersion,
     String name,
     String description,

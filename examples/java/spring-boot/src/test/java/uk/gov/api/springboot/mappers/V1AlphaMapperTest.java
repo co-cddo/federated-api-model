@@ -7,22 +7,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
-import uk.gov.api.springboot.dtos.MetadataDto;
+import uk.gov.api.springboot.dtos.Api;
 
 class V1AlphaMapperTest {
 
   private final V1AlphaMapper mapper = new V1AlphaMapper();
 
   @Nested
-  class ConvertMetadataDto {
+  class ConvertApi {
 
     private ApiMetadata actual;
 
     @BeforeEach
     void setup() {
-      var dto = getMetadataDto();
+      var api = getApi();
 
-      actual = mapper.convert(dto);
+      actual = mapper.convert(api);
     }
 
     @Test
@@ -60,8 +60,8 @@ class V1AlphaMapperTest {
       assertDocumentationUrl(actual, "https://www.exampledocs.foo");
     }
 
-    private MetadataDto getMetadataDto() {
-      return new MetadataDto(
+    private Api getApi() {
+      return new Api(
           "api.gov.uk/v1alpha",
           "name 1",
           "description 1",

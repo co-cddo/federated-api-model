@@ -25,23 +25,23 @@ import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.models.metadata.v1alpha.Data;
 import uk.gov.api.springboot.config.CorrelationIdFilter;
-import uk.gov.api.springboot.dtos.MetadataDto;
+import uk.gov.api.springboot.dtos.Api;
 import uk.gov.api.springboot.mappers.V1AlphaMapper;
-import uk.gov.api.springboot.services.MetadataService;
+import uk.gov.api.springboot.services.ApiService;
 
 @AutoConfigureMockMvc
 @WebMvcTest(
-    value = MetadataController.class,
+    value = ApiController.class,
     excludeFilters =
         @ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = CorrelationIdFilter.class))
 @ExtendWith(SpringExtension.class)
-class MetadataControllerIntegrationTest {
+class ApiControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
 
-  @MockBean private MetadataService service;
+  @MockBean private ApiService service;
   @MockBean private V1AlphaMapper v1AlphaMapper;
 
   @Nested
@@ -54,13 +54,13 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void mockDataIsReturned() throws Exception {
-      var dto1 = validDto("API 1");
-      var dto2 = validDto("API 2");
+      var api1 = validApi("API 1");
+      var api2 = validApi("API 2");
       var response1 = validApiMetadata("API 1");
       var response2 = validApiMetadata("API 2");
-      when(service.retrieveAll()).thenReturn(List.of(dto1, dto2));
-      when(v1AlphaMapper.convert(dto1)).thenReturn(response1);
-      when(v1AlphaMapper.convert(dto2)).thenReturn(response2);
+      when(service.retrieveAll()).thenReturn(List.of(api1, api2));
+      when(v1AlphaMapper.convert(api1)).thenReturn(response1);
+      when(v1AlphaMapper.convert(api2)).thenReturn(response2);
 
       mockMvc
           .perform(get("/apis"))
@@ -70,10 +70,10 @@ class MetadataControllerIntegrationTest {
 
     @Test
     void returnsResponseValidatesAgainstSchema() throws Exception {
-      when(service.retrieveAll()).thenReturn(List.of(validDto()));
-      var dto = validDto();
+      when(service.retrieveAll()).thenReturn(List.of(validApi()));
+      var api = validApi();
       var response = validApiMetadata();
-      when(v1AlphaMapper.convert(dto)).thenReturn(response);
+      when(v1AlphaMapper.convert(api)).thenReturn(response);
 
       mockMvc
           .perform(get("/apis"))
@@ -118,12 +118,12 @@ class MetadataControllerIntegrationTest {
     }
   }
 
-  private static MetadataDto validDto() {
-    return validDto("Name");
+  private static Api validApi() {
+    return validApi("Name");
   }
 
-  private static MetadataDto validDto(String name) {
-    return new MetadataDto(
+  private static Api validApi(String name) {
+    return new Api(
         "api.gov.uk/v1alpha",
         name,
         "the API description",
