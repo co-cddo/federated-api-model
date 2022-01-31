@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,8 +23,8 @@ class CorrelationIdFilterTest {
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   @Mock private FilterChain filterChain;
-
-  private final CorrelationIdFilter filter = new CorrelationIdFilter();
+  @Mock private ErrorResponseDecorator errorResponseDecorator;
+  @InjectMocks private CorrelationIdFilter filter;
 
   @Test
   void delegatesToFilterChain() throws ServletException, IOException {
@@ -63,5 +64,28 @@ class CorrelationIdFilterTest {
         .addHeader(
             eq("correlation-id"),
             matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"));
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+          strings = {
+                  "93094CAB-21D7-43EC-97E9-566573544781",
+                  "93094cab-21d7-43ec-97e9-566573544781"
+          })
+  void uuidVersionFourIsAccepted(String correlationId) throws ServletException, IOException {
+    when(request.getHeader("correlation-id")).thenReturn(correlationId);
+
+    filter.doFilterInternal(request, response, filterChain);
+
+    verify(response).addHeader("correlation-id", correlationId);
+  }
+
+  @Test
+  void uuidVersionOneIsNotAccepted() throws ServletException, IOException {
+    when(request.getHeader("correlation-id")).thenReturn("93094CAB-21D7-13EC-97E9-566573544781");
+
+    filter.doFilterInternal(request, response, filterChain);
+
+    verify(errorResponseDecorator).decorateWithNegotiation(request, response, "The value provided in the `correlation-id` header was expected to be a UUID format, but was not provided in a valid format");
   }
 }

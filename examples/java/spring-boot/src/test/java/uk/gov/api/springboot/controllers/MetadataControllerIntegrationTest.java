@@ -17,17 +17,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.api.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.models.metadata.v1alpha.Data;
+import uk.gov.api.springboot.config.CorrelationIdFilter;
 import uk.gov.api.springboot.dtos.MetadataDto;
 import uk.gov.api.springboot.mappers.V1AlphaMapper;
 import uk.gov.api.springboot.services.MetadataService;
 
 @AutoConfigureMockMvc
-@WebMvcTest(MetadataController.class)
+@WebMvcTest(
+    value = MetadataController.class,
+    excludeFilters =
+        @ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = CorrelationIdFilter.class))
 @ExtendWith(SpringExtension.class)
 class MetadataControllerIntegrationTest {
 
