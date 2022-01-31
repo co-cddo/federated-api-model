@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.restassured.module.jsv.JsonSchemaValidator;
 import java.net.URI;
 import java.util.List;
+
+import me.jvt.spring.ContentNegotiator;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -29,6 +32,7 @@ import uk.gov.api.springboot.services.MetadataService;
 @AutoConfigureMockMvc
 @WebMvcTest(MetadataController.class)
 @ExtendWith(SpringExtension.class)
+@ComponentScan("uk.gov.api.springboot.config")
 class MetadataControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,12 +21,11 @@ import java.util.UUID;
 @ExtendWith(MockitoExtension.class)
 class CorrelationIdFilterTest {
 
-  @Mock
-  private HttpServletRequest request;
+  @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   @Mock private FilterChain filterChain;
-
-  private final CorrelationIdFilter filter = new CorrelationIdFilter();
+  @Mock private ErrorResponseDecorator errorResponseDecorator;
+  @InjectMocks private CorrelationIdFilter filter;
 
   @Test
   void delegatesToFilterChain() throws ServletException, IOException {
