@@ -17,3 +17,20 @@ paths:
             application/vnd.uk.gov.api.v1alpha+json:
               schema:
                 $ref: './bulk-metadata-response.json'
+          headers:
+            correlation-id:
+              description: A unique identifier to allow for correlating requests
+              required: true
+              schema:
+                type: string
+                format: uuidv4
+                pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}"
+      parameters:
+        - name: correlation-id
+          in: header
+          description: A unique identifier to allow for correlating requests
+          required: false
+          schema:
+            type: string
+            format: uuidv4
+            pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}"
