@@ -65,20 +65,32 @@ jobs:
     environment: sandbox
     runs-on: ubuntu-18.04
     needs: test
+    env:
+      CF_API: "https://api.london.cloud.service.gov.uk"
+      CF_ORG: "cabinet-office-cddo-dsa-apis"
+      CF_SPACE: "sandbox"
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
           name: examples-java-libs
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
           name: spring-boot-manifest
+      - name: Install the CF CLI
+        run: |
+          wget -q -O cf.tar.gz "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=7.4.0&source=github-rel"
+          sudo tar xzf cf.tar.gz --wildcards --directory /usr/local/bin/ "cf*"
+      - name: Authenticate
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        run: |
+          echo "Logging into $CF_ORG/$CF_SPACE..."
+          cf api "${CF_API}"
+          cf auth
+          cf target -o "${CF_ORG}" -s "${CF_SPACE}"
       - name: Deploy to PaaS
-        uses: citizen-of-planet-earth/cf-cli-action@v2
-        with:
-          cf_api: https://api.london.cloud.service.gov.uk
-          cf_username: ${{ secrets.CF_USER }}
-          cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: cabinet-office-cddo-dsa-apis
-          cf_space: sandbox
-          command: push -f manifest.yml -p examples/java/spring-boot/build/libs/federated-api-model.jar
+        run: |
+          cf push -f manifest.yml
+          cf logout
