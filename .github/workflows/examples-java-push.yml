@@ -16,22 +16,22 @@ jobs:
         working-directory: examples/java
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
         with:
           fetch-depth: 0
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@f0bb91606209742fe3ea40199be2f3ef195ecabf
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Cache Gradle packages
-        uses: actions/cache@v2
+        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
         with:
           path: ~/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -44,19 +44,19 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2
         with:
           name: examples-java-libs
           path: '**/build/libs/*'
           retention-days: 5
       - name: Upload Test reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2
         with:
           name: examples-java-reports
           path: '**/build/reports/*'
           retention-days: 5
       - name: Upload spring-boot manifest
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2
         with:
           name: spring-boot-manifest
           path: 'examples/java/spring-boot/manifest.yml'
@@ -65,20 +65,32 @@ jobs:
     environment: sandbox
     runs-on: ubuntu-18.04
     needs: test
+    env:
+      CF_API: "https://api.london.cloud.service.gov.uk"
+      CF_ORG: "cabinet-office-cddo-dsa-apis"
+      CF_SPACE: "sandbox"
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
           name: examples-java-libs
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
           name: spring-boot-manifest
+      - name: Install the CF CLI
+        run: |
+          wget -q -O cf.tar.gz "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=7.4.0&source=github-rel"
+          sudo tar xzf cf.tar.gz --wildcards --directory /usr/local/bin/ "cf*"
+      - name: Authenticate
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        run: |
+          echo "Logging into $CF_ORG/$CF_SPACE..."
+          cf api "${CF_API}"
+          cf auth
+          cf target -o "${CF_ORG}" -s "${CF_SPACE}"
       - name: Deploy to PaaS
-        uses: citizen-of-planet-earth/cf-cli-action@v2
-        with:
-          cf_api: https://api.london.cloud.service.gov.uk
-          cf_username: ${{ secrets.CF_USER }}
-          cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: cabinet-office-cddo-dsa-apis
-          cf_space: sandbox
-          command: push -f manifest.yml -p examples/java/spring-boot/build/libs/federated-api-model.jar
+        run: |
+          cf push -f manifest.yml --strategy rolling
+          cf logout
