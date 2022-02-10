@@ -3,9 +3,9 @@ package uk.gov.api.springboot.architecture;
 import static com.tngtech.archunit.base.DescribedPredicate.describe;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.lang.ArchRule;
 import org.jmolecules.architecture.onion.classical.ApplicationServiceRing;
 import org.jmolecules.archunit.JMoleculesArchitectureRules;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,65 +21,73 @@ class ArchitectureLayeringTest {
   private static final String DOMAIN_RING = "..domain..";
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule onionArchitecture = JMoleculesArchitectureRules.ensureOnionClassical();
+  void onionArchitecture(JavaClasses classes) {
+    JMoleculesArchitectureRules.ensureOnionClassical().check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule mockMvcAnnotationShouldOnlyBeUsedInInfrastructureRing =
-      classes()
-          .that()
-          .areAnnotatedWith(AutoConfigureMockMvc.class)
-          .should()
-          .resideInAPackage(INFRASTRUCTURE_RING);
+  void mockMvcAnnotationShouldOnlyBeUsedInInfrastructureRing(JavaClasses classes) {
+    classes()
+        .that()
+        .areAnnotatedWith(AutoConfigureMockMvc.class)
+        .should()
+        .resideInAPackage(INFRASTRUCTURE_RING)
+        .check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule webMvcTestAnnotationShouldOnlyBeUsedInInfrastructureRing =
-      classes()
-          .that()
-          .areAnnotatedWith(WebMvcTest.class)
-          .should()
-          .resideInAPackage(INFRASTRUCTURE_RING);
+  void webMvcTestAnnotationShouldOnlyBeUsedInInfrastructureRing(JavaClasses classes) {
+    classes()
+        .that()
+        .areAnnotatedWith(WebMvcTest.class)
+        .should()
+        .resideInAPackage(INFRASTRUCTURE_RING)
+        .check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule springBootTestAnnotationShouldOnlyBeUsedInApplicationOrInfrastructureRing =
-      classes()
-          .that()
-          .areAnnotatedWith(SpringBootTest.class)
-          .should()
-          .resideInAnyPackage(APPLICATION_RING, INFRASTRUCTURE_RING);
+  void springBootTestAnnotationShouldOnlyBeUsedInApplicationOrInfrastructureRing(
+      JavaClasses classes) {
+    classes()
+        .that()
+        .areAnnotatedWith(SpringBootTest.class)
+        .should()
+        .resideInAnyPackage(APPLICATION_RING, INFRASTRUCTURE_RING)
+        .check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule springBootApplicationAnnotationShouldOnlyBeUsedInApplicationRing =
-      classes()
-          .that()
-          .areAnnotatedWith(SpringBootApplication.class)
-          .should()
-          .resideInAPackage(APPLICATION_RING)
-          .orShould()
-          .beAnnotatedWith(ApplicationServiceRing.class);
+  void springBootApplicationAnnotationShouldOnlyBeUsedInApplicationRing(JavaClasses classes) {
+    classes()
+        .that()
+        .areAnnotatedWith(SpringBootApplication.class)
+        .should()
+        .resideInAPackage(APPLICATION_RING)
+        .orShould()
+        .beAnnotatedWith(ApplicationServiceRing.class)
+        .check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule mockMvcShouldOnlyBeUsedInInfrastructureRing =
-      classes()
-          .that()
-          .containAnyFieldsThat(
-              describe(
-                  "are instances of `MockMvc`", f -> f.getRawType().isEquivalentTo(MockMvc.class)))
-          .should()
-          .resideInAPackage(INFRASTRUCTURE_RING);
+  void mockMvcShouldOnlyBeUsedInInfrastructureRing(JavaClasses classes) {
+    classes()
+        .that()
+        .containAnyFieldsThat(
+            describe(
+                "are instances of `MockMvc`", f -> f.getRawType().isEquivalentTo(MockMvc.class)))
+        .should()
+        .resideInAPackage(INFRASTRUCTURE_RING)
+        .check(classes);
+  }
 
   @ArchTest
-  @SuppressWarnings("unused")
-  private final ArchRule domainRingIsSelfSufficient =
-      classes()
-          .that()
-          .resideInAPackage(DOMAIN_RING)
-          .should()
-          .onlyAccessClassesThat()
-          .resideInAnyPackage(DOMAIN_RING, "java..");
+  void domainRingIsSelfSufficient(JavaClasses classes) {
+    classes()
+        .that()
+        .resideInAPackage(DOMAIN_RING)
+        .should()
+        .onlyAccessClassesThat()
+        .resideInAnyPackage(DOMAIN_RING, "java..")
+        .check(classes);
+  }
 }
