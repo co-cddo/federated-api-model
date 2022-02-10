@@ -12,6 +12,7 @@ apply plugin: 'jsonschema2pojo'
 
 dependencies {
   implementation 'org.apache.logging.log4j:log4j-layout-template-json'
+  implementation 'org.jmolecules:jmolecules-onion-architecture:1.4.0'
   implementation 'org.springframework.boot:spring-boot-starter-log4j2'
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -20,6 +21,7 @@ dependencies {
   testImplementation 'com.github.valfirst:slf4j-test:2.5.0'
   testImplementation 'com.tngtech.archunit:archunit:0.22.0'
   testImplementation 'com.tngtech.archunit:archunit-junit5:0.22.0'
+  testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.8.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.rest-assured:json-schema-validator:4.5.0'
 }
@@ -34,7 +36,7 @@ processTestResources.finalizedBy copySchemas
 jsonSchema2Pojo {
   source = files(fileTree(dir: '../../../schemas/v1alpha', include: ['*.json']))
   targetDirectory = file("${project.buildDir}/generated-sources/js2p")
-  targetPackage = "uk.gov.api.models.metadata.v1alpha"
+  targetPackage = "uk.gov.api.springboot.infrastructure.models.metadata.v1alpha"
 }
 
 bootJar {

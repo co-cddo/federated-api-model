@@ -16,7 +16,11 @@ class ArchUnitTest {
   @ArchTest
   @SuppressWarnings("unused")
   ArchRule requireFinalFields =
-      classesThatAreNotTests().and().haveNameNotMatching(".*Dao").should().haveOnlyFinalFields();
+      classesThatAreNotTests()
+          .and()
+          .resideOutsideOfPackage("uk.gov.api.springboot.infrastructure.models.metadata..")
+          .should()
+          .haveOnlyFinalFields();
 
   @ArchTest
   @SuppressWarnings("unused")
