@@ -92,5 +92,5 @@ jobs:
           cf target -o "${CF_ORG}" -s "${CF_SPACE}"
       - name: Deploy to PaaS
         run: |
-          cf push -f manifest.yml
+          cf push -f manifest.yml --strategy rolling
           cf logout
