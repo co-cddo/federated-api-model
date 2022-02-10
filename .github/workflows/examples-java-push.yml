@@ -83,7 +83,7 @@ jobs:
           sudo tar xzf cf.tar.gz --wildcards --directory /usr/local/bin/ "cf*"
       - name: Authenticate
         env:
-          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_USERNAME: ${{ secrets.CF_USER }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
         run: |
           echo "Logging into $CF_ORG/$CF_SPACE..."
