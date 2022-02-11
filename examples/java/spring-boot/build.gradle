@@ -23,7 +23,7 @@ dependencies {
   testImplementation 'com.tngtech.archunit:archunit-junit5:0.22.0'
   testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.8.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'io.rest-assured:json-schema-validator:4.5.0'
+  testImplementation 'io.rest-assured:json-schema-validator:4.5.1'
 }
 
 task copySchemas(type: Copy) {
