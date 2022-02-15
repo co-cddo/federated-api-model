@@ -1,9 +1,9 @@
 package uk.gov.api.springboot.infrastructure.config;
 
+import static com.github.valfirst.slf4jtest.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-import com.github.valfirst.slf4jtest.Assertions;
 import com.github.valfirst.slf4jtest.LoggingEvent;
 import com.github.valfirst.slf4jtest.TestLogger;
 import com.github.valfirst.slf4jtest.TestLoggerFactory;
@@ -125,7 +125,7 @@ class CorrelationIdFilterTest {
 
         filter.doFilterInternal(request, response, filterChain);
 
-        Assertions.assertThat(logger)
+        assertThat(logger)
             .hasLogged(
                 LoggingEvent.info("A request was sent with correlation-id {}", correlationId));
       }
@@ -139,7 +139,7 @@ class CorrelationIdFilterTest {
         assertThatThrownBy(() -> filter.doFilterInternal(request, response, filterChain))
             .isInstanceOf(IOException.class);
 
-        Assertions.assertThat(logger)
+        assertThat(logger)
             .hasLogged(
                 LoggingEvent.info("A request was sent with correlation-id {}", correlationId));
       }
@@ -150,7 +150,7 @@ class CorrelationIdFilterTest {
 
         filter.doFilterInternal(request, response, filterChain);
 
-        Assertions.assertThat(logger)
+        assertThat(logger)
             .hasLogged(
                 LoggingEvent.warn(
                     "The value provided in the `correlation-id` header was not provided in a valid UUID format"));
