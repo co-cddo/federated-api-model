@@ -20,6 +20,7 @@ dependencies {
   implementation 'me.jvt.uuid:uuid-core:0.8.1'
   testImplementation 'com.github.valfirst:slf4j-test:2.5.0'
   testImplementation 'com.tngtech.archunit:archunit-junit5:0.23.1'
+  testImplementation 'org.awaitility:awaitility:4.1.1'
   testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.8.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'io.rest-assured:json-schema-validator:4.5.1'
