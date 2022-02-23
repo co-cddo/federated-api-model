@@ -1,6 +1,6 @@
 # Spring Boot application
 
-This is a Spring Boot application built from the [schemas for the federated model](https://github.com/co-cddo/federated-api-model/tree/main/schemas) top level of this repository.
+This is a Spring Boot application built from the [schemas for the federated model](https://github.com/co-cddo/federated-api-model/tree/main/schemas) at the top level of this repository.
 
 The [OpenAPI documentation](https://github.com/co-cddo/federated-api-model/blob/spring-boot-readme/schemas/v1alpha/openapi.yml) is also located in the `schemas` directory.
 
