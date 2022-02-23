@@ -8,6 +8,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import org.jmolecules.architecture.onion.classical.ApplicationServiceRing;
 import org.jmolecules.archunit.JMoleculesArchitectureRules;
+import org.junit.jupiter.api.Nested;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -84,6 +85,10 @@ class ArchitectureLayeringTest {
   void domainRingIsSelfSufficient(JavaClasses classes) {
     classes()
         .that()
+        .haveNameNotMatching(".*Test")
+        .and()
+        .areNotAnnotatedWith(Nested.class)
+        .and()
         .resideInAPackage(DOMAIN_RING)
         .should()
         .onlyAccessClassesThat()
