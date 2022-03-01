@@ -33,6 +33,7 @@ class ArchUnitTest {
                 f -> f.tryGetAnnotationOfType(Autowired.class).isPresent()))
         .should()
         .containNumberOfElements(equalTo(0))
+        .allowEmptyShould(true)
         .check(classes);
   }
 
