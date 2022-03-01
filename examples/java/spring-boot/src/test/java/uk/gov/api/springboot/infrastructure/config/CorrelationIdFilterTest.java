@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CorrelationIdFilterTest {
 
+  private static final String EXAMPLE_VALID_CORRELATION_ID = "93094CAB-21D7-43EC-97E9-566573544781";
   @Mock private HttpServletRequest request;
   @Mock private HttpServletResponse response;
   @Mock private FilterChain filterChain;
@@ -108,32 +109,30 @@ class CorrelationIdFilterTest {
       @Test
       void correlationIdIsAddedToMdcBeforeFilterChainContinues()
           throws ServletException, IOException {
-        String correlationId = "93094CAB-21D7-43EC-97E9-566573544781";
-        when(request.getHeader("correlation-id")).thenReturn(correlationId);
+        when(request.getHeader("correlation-id")).thenReturn(EXAMPLE_VALID_CORRELATION_ID);
 
         filter.doFilterInternal(request, response, filterChain);
 
         InOrder inOrder = inOrder(mdcFacade, filterChain);
-        inOrder.verify(mdcFacade).put("correlation-id", correlationId);
+        inOrder.verify(mdcFacade).put("correlation-id", EXAMPLE_VALID_CORRELATION_ID);
         inOrder.verify(filterChain).doFilter(request, response);
       }
 
       @Test
       void thatARequestWasSent() throws ServletException, IOException {
-        String correlationId = "93094CAB-21D7-43EC-97E9-566573544781";
-        when(request.getHeader("correlation-id")).thenReturn(correlationId);
+        when(request.getHeader("correlation-id")).thenReturn(EXAMPLE_VALID_CORRELATION_ID);
 
         filter.doFilterInternal(request, response, filterChain);
 
         assertThat(logger)
             .hasLogged(
-                LoggingEvent.info("A request was sent with correlation-id {}", correlationId));
+                LoggingEvent.info(
+                    "A request was sent with correlation-id {}", EXAMPLE_VALID_CORRELATION_ID));
       }
 
       @Test
       void messageIsLoggedBeforeFilterChainContinues() throws ServletException, IOException {
-        String correlationId = "93094CAB-21D7-43EC-97E9-566573544781";
-        when(request.getHeader("correlation-id")).thenReturn(correlationId);
+        when(request.getHeader("correlation-id")).thenReturn(EXAMPLE_VALID_CORRELATION_ID);
         doThrow(new IOException()).when(filterChain).doFilter(any(), any());
 
         assertThatThrownBy(() -> filter.doFilterInternal(request, response, filterChain))
@@ -141,7 +140,8 @@ class CorrelationIdFilterTest {
 
         assertThat(logger)
             .hasLogged(
-                LoggingEvent.info("A request was sent with correlation-id {}", correlationId));
+                LoggingEvent.info(
+                    "A request was sent with correlation-id {}", EXAMPLE_VALID_CORRELATION_ID));
       }
 
       @Test

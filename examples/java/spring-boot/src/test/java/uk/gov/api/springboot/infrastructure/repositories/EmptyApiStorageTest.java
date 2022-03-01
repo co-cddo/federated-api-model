@@ -7,17 +7,15 @@ import org.junit.jupiter.api.Test;
 
 class EmptyApiStorageTest {
 
+  private final EmptyApiStorage storage = new EmptyApiStorage();
+
   @Test
   void findAllReturnsEmptyList() {
-    var storage = new EmptyApiStorage();
-
     assertThat(storage.findAll()).isEmpty();
   }
 
   @Test
   void findAllReturnsUnmodifiableList() {
-    var storage = new EmptyApiStorage();
-
     var actual = storage.findAll();
 
     assertThatThrownBy(() -> actual.add(null)).isInstanceOf(UnsupportedOperationException.class);
