@@ -1,22 +1,22 @@
-package uk.gov.api.springboot.infrastructure.repositories;
+package uk.gov.api.springboot.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-class EmptyApiStorageTest {
+class NoopRegistryTest {
 
-  private final EmptyApiStorage storage = new EmptyApiStorage();
+  private final NoopRegistry registry = new NoopRegistry();
 
   @Test
   void findAllReturnsEmptyList() {
-    assertThat(storage.findAll()).isEmpty();
+    assertThat(registry.retrieveAll()).isEmpty();
   }
 
   @Test
   void findAllReturnsUnmodifiableList() {
-    var actual = storage.findAll();
+    var actual = registry.retrieveAll();
 
     assertThatThrownBy(() -> actual.add(null)).isInstanceOf(UnsupportedOperationException.class);
   }
