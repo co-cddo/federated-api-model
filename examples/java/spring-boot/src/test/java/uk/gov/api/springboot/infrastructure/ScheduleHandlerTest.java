@@ -9,6 +9,7 @@ import com.github.valfirst.slf4jtest.LoggingEvent;
 import com.github.valfirst.slf4jtest.TestLogger;
 import com.github.valfirst.slf4jtest.TestLoggerFactory;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ class ScheduleHandlerTest {
 
   @Test
   void registryEntriesArePassedToFetcher() {
-    var entry = new Registry.Entry("123", "https://api-endpoint.example");
+    var entry = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example");
     when(registry.retrieveAll()).thenReturn(List.of(entry));
 
     handler.fetchAndSaveApis();
@@ -66,7 +67,7 @@ class ScheduleHandlerTest {
 
   @Test
   void apisAreSavedToStorage() {
-    var entry = new Registry.Entry("123", "https://api-endpoint.example-one");
+    var entry = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
     when(registry.retrieveAll()).thenReturn(List.of(entry));
     Api api = new Api(null, null, null, null, null, null);
     when(fetcherService.fetch(any())).thenReturn(List.of(api));

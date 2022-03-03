@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Registry {
 
-  public record Entry(String id, String baseUrl) {}
+  public record Entry(java.util.UUID id, String baseUrl) {}
 
   public interface Storage {
     List<Entry> retrieveAll();
