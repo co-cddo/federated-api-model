@@ -1,13 +1,13 @@
-package uk.gov.api.springboot.application;
+package uk.gov.api.springboot.infrastructure.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-class NoopRegistryTest {
+class NoopRegistryStorageTest {
 
-  private final NoopRegistry registry = new NoopRegistry();
+  private final NoopRegistryStorage registry = new NoopRegistryStorage();
 
   @Test
   void findAllReturnsEmptyList() {
