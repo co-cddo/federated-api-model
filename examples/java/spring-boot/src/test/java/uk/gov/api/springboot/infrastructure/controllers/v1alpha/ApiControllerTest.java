@@ -30,8 +30,8 @@ class ApiControllerTest {
 
     @Test
     void returnsListOfApiMetadata(@Mock ApiMetadata metadata1, @Mock ApiMetadata metadata2) {
-      Api api1 = new Api("v1", null, null, null, null, null, null);
-      Api api2 = new Api("v2", null, null, null, null, null, null);
+      Api api1 = new Api("name1", null, null, null, null, null);
+      Api api2 = new Api("name2", null, null, null, null, null);
       when(service.retrieveAll()).thenReturn(List.of(api1, api2));
       when(v1AlphaMapper.convert(api1)).thenReturn(metadata1);
       when(v1AlphaMapper.convert(api2)).thenReturn(metadata2);

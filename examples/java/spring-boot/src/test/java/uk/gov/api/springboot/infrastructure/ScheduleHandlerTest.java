@@ -68,7 +68,7 @@ class ScheduleHandlerTest {
   void apisAreSavedToStorage() {
     var entry = new Registry.Entry("123", "https://api-endpoint.example-one");
     when(registry.retrieveAll()).thenReturn(List.of(entry));
-    Api api = new Api("v1", null, null, null, null, null, null);
+    Api api = new Api(null, null, null, null, null, null);
     when(fetcherService.fetch(any())).thenReturn(List.of(api));
 
     handler.fetchAndSaveApis();

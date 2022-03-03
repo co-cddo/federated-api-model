@@ -122,7 +122,6 @@ class ApiControllerIntegrationTest {
 
   private static Api validApi(String name) {
     return new Api(
-        "api.gov.uk/v1alpha",
         name,
         "the API description",
         "https://api-endpoint.example",

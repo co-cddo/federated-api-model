@@ -17,7 +17,7 @@ public class V1AlphaMapper {
    */
   public ApiMetadata convert(Api api) {
     var apiMetadata = new ApiMetadata();
-    apiMetadata.setApiVersion(ApiMetadata.ApiVersion.fromValue(api.apiVersion()));
+    apiMetadata.setApiVersion(ApiMetadata.ApiVersion.API_GOV_UK_V_1_ALPHA);
     var data = new Data();
     data.setName(api.name());
     data.setDescription(api.description());
