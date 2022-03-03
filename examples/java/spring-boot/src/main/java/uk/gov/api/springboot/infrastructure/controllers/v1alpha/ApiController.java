@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.infrastructure.models.metadata.v1alpha;
+package uk.gov.api.springboot.infrastructure.controllers.v1alpha;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.api.springboot.application.services.ApiService;
 import uk.gov.api.springboot.infrastructure.mappers.V1AlphaMapper;
+import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.ApiMetadata;
+import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.BulkMetadataResponse;
 
 @RestController
 @RequestMapping("/apis")
