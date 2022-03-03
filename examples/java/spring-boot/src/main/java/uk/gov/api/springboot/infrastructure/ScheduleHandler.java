@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uk.gov.api.springboot.domain.model.Registry;
 import uk.gov.api.springboot.domain.model.repositories.ApiStorage;
-import uk.gov.api.springboot.domain.services.FetcherService;
+import uk.gov.api.springboot.domain.services.fetcher.FetcherService;
 
 @Component
 public class ScheduleHandler {

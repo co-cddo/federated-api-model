@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.springboot.domain.model.Api;
 import uk.gov.api.springboot.domain.model.Registry;
 import uk.gov.api.springboot.domain.model.repositories.ApiStorage;
-import uk.gov.api.springboot.domain.services.FetcherService;
+import uk.gov.api.springboot.domain.services.fetcher.FetcherService;
 
 @ExtendWith(MockitoExtension.class)
 class ScheduleHandlerTest {

@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.domain.services;
+package uk.gov.api.springboot.domain.services.fetcher;
 
 import java.util.List;
 import uk.gov.api.springboot.domain.model.Api;
