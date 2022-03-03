@@ -71,10 +71,10 @@ jobs:
       CF_SPACE: "sandbox"
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
+      - uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
           name: examples-java-libs
-      - uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
+      - uses: actions/download-artifact@fb598a63ae348fa914e94cd0ff38f362e927b741
         with:
           name: spring-boot-manifest
       - name: Install the CF CLI
