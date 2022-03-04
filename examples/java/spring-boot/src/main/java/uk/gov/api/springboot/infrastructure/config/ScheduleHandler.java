@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.infrastructure;
+package uk.gov.api.springboot.infrastructure.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
