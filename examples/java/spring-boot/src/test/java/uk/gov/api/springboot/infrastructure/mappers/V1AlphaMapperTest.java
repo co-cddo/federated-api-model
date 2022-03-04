@@ -62,7 +62,6 @@ class V1AlphaMapperTest {
 
     private Api getApi() {
       return new Api(
-          "api.gov.uk/v1alpha",
           "name 1",
           "description 1",
           "https://www.example.foo",
