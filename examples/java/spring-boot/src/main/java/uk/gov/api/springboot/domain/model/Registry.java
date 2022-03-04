@@ -6,9 +6,21 @@ import java.util.List;
  * Interface representing a registry, which returns a list of entries representing external services
  * to parse.
  */
-public interface Registry {
+public class Registry {
 
-  List<Entry> retrieveAll();
+  public record Entry(java.util.UUID id, String baseUrl) {}
 
-  record Entry(String id, String baseUrl) {}
+  public interface Storage {
+    List<Entry> retrieveAll();
+  }
+
+  private final Storage storage;
+
+  public Registry(Storage storage) {
+    this.storage = storage;
+  }
+
+  public List<Entry> retrieveAll() {
+    return storage.retrieveAll();
+  }
 }
