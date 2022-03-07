@@ -32,7 +32,7 @@ public interface Fetcher {
    *
    * @see ClientErrorException
    */
-  class VersionNotSupportedException extends Exception {}
+  class VersionNotSupportedException extends RuntimeException {}
 
   /**
    * There was an indication that this client performed an invalid request.
@@ -44,12 +44,12 @@ public interface Fetcher {
    *
    * @see VersionNotSupportedException
    */
-  class ClientErrorException extends Exception {}
+  class ClientErrorException extends RuntimeException {}
 
   /**
    * There was an indication that the provider had an error during the request.
    *
    * <p>Most likely mapping directly to an HTTP 5xx.
    */
-  class TemporaryErrorException extends Exception {}
+  class TemporaryErrorException extends RuntimeException {}
 }
