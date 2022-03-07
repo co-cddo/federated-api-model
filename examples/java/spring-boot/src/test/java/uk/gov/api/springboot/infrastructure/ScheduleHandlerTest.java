@@ -20,7 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.springboot.domain.model.Api;
 import uk.gov.api.springboot.domain.model.Registry;
 import uk.gov.api.springboot.domain.model.repositories.ApiStorage;
-import uk.gov.api.springboot.domain.services.FetcherService;
+import uk.gov.api.springboot.domain.services.fetcher.Fetcher;
+import uk.gov.api.springboot.domain.services.fetcher.FetcherService;
 
 @ExtendWith(MockitoExtension.class)
 class ScheduleHandlerTest {
@@ -56,7 +57,8 @@ class ScheduleHandlerTest {
   }
 
   @Test
-  void registryEntriesArePassedToFetcher() {
+  void registryEntriesArePassedToFetcher()
+      throws Fetcher.ClientErrorException, Fetcher.TemporaryErrorException {
     var entry = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example");
     when(registry.retrieveAll()).thenReturn(List.of(entry));
 
@@ -66,11 +68,46 @@ class ScheduleHandlerTest {
   }
 
   @Test
-  void apisAreSavedToStorage() {
+  void apisAreSavedToStorage()
+      throws Fetcher.ClientErrorException, Fetcher.TemporaryErrorException {
     var entry = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
     when(registry.retrieveAll()).thenReturn(List.of(entry));
     Api api = new Api(null, null, null, null, null, null);
     when(fetcherService.fetch(any())).thenReturn(List.of(api));
+
+    handler.fetchAndSaveApis();
+
+    verify(storage).save(api);
+  }
+
+  @Test
+  void clientErrorFetchExceptionsDoNotInterruptFlow()
+      throws Fetcher.ClientErrorException, Fetcher.TemporaryErrorException {
+    var entry0 = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
+    var entry1 = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
+    when(registry.retrieveAll()).thenReturn(List.of(entry0, entry1));
+
+    Api api = new Api(null, null, null, null, null, null);
+    when(fetcherService.fetch(any()))
+        .thenThrow(new Fetcher.ClientErrorException())
+        .thenReturn(List.of(api));
+
+    handler.fetchAndSaveApis();
+
+    verify(storage).save(api);
+  }
+
+  @Test
+  void temporaryFetchErrorExceptionsDoNotInterruptFlow()
+      throws Fetcher.ClientErrorException, Fetcher.TemporaryErrorException {
+    var entry0 = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
+    var entry1 = new Registry.Entry(UUID.randomUUID(), "https://api-endpoint.example-one");
+    when(registry.retrieveAll()).thenReturn(List.of(entry0, entry1));
+
+    Api api = new Api(null, null, null, null, null, null);
+    when(fetcherService.fetch(any()))
+        .thenThrow(new Fetcher.TemporaryErrorException())
+        .thenReturn(List.of(api));
 
     handler.fetchAndSaveApis();
 

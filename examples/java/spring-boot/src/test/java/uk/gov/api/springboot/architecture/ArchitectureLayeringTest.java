@@ -92,7 +92,7 @@ class ArchitectureLayeringTest {
         .resideInAPackage(DOMAIN_RING)
         .should()
         .onlyAccessClassesThat()
-        .resideInAnyPackage(DOMAIN_RING, "java..")
+        .resideInAnyPackage(DOMAIN_RING, "java..", "org.slf4j..")
         .check(classes);
   }
 }

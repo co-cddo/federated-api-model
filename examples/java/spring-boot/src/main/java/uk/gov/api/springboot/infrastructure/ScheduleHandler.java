@@ -6,7 +6,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uk.gov.api.springboot.domain.model.Registry;
 import uk.gov.api.springboot.domain.model.repositories.ApiStorage;
-import uk.gov.api.springboot.domain.services.FetcherService;
+import uk.gov.api.springboot.domain.services.fetcher.Fetcher;
+import uk.gov.api.springboot.domain.services.fetcher.FetcherService;
 
 @Component
 public class ScheduleHandler {
@@ -28,7 +29,16 @@ public class ScheduleHandler {
 
     // Save each list of APIs individually rather than flattening the list, so we don't have to wait
     // for all lists to be fetched before we start saving.
-    registry.retrieveAll().forEach(entry -> fetcherService.fetch(entry).forEach(storage::save));
+    registry
+        .retrieveAll()
+        .forEach(
+            entry -> {
+              try {
+                fetcherService.fetch(entry).forEach(storage::save);
+              } catch (Fetcher.ClientErrorException | Fetcher.TemporaryErrorException e) {
+                // ignored, and logged elsewhere
+              }
+            });
 
     LOGGER.info("Finished fetching and saving APIs");
   }
