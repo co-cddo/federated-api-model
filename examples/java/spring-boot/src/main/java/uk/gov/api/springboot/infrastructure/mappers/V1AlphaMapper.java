@@ -28,4 +28,20 @@ public class V1AlphaMapper {
     apiMetadata.setData(data);
     return apiMetadata;
   }
+
+  /**
+   * Convert a v1alpha {@link ApiMetadata} HTTP object to a {@link Api} object.
+   *
+   * @param apiMetadata the {@link ApiMetadata} to convert
+   * @return the {@link Api}
+   */
+  public Api from(ApiMetadata apiMetadata) {
+    return new Api(
+        apiMetadata.getData().getName(),
+        apiMetadata.getData().getDescription(),
+        apiMetadata.getData().getUrl().toString(),
+        apiMetadata.getData().getContact(),
+        apiMetadata.getData().getOrganisation(),
+        apiMetadata.getData().getDocumentationUrl().toString());
+  }
 }
