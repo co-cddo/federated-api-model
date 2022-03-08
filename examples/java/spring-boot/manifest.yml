@@ -5,6 +5,6 @@ applications:
       - https://github.com/cloudfoundry/java-buildpack.git#v4.47
     env:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 17.+ } }'
-      SPRING_PROFILES_ACTIVE: 'staging'
+      SPRING_PROFILES_ACTIVE: 'sandbox'
     health-check-type: http
     health-check-http-endpoint: '/actuator/health'
