@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.infrastructure;
+package uk.gov.api.springboot.infrastructure.config;
 
 import static com.github.valfirst.slf4jtest.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

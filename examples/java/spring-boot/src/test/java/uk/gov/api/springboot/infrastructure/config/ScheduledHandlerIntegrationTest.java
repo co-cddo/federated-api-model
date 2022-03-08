@@ -1,4 +1,4 @@
-package uk.gov.api.springboot.infrastructure;
+package uk.gov.api.springboot.infrastructure.config;
 
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.atLeast;
