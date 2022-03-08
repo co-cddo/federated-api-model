@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.api.springboot.application.services.ApiService;
 import uk.gov.api.springboot.domain.model.Api;
 import uk.gov.api.springboot.infrastructure.mappers.V1AlphaMapper;
-import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.ApiController;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.ApiMetadata;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.BulkMetadataResponse;
 
