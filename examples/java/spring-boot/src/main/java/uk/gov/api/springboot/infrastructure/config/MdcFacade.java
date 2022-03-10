@@ -15,4 +15,8 @@ public class MdcFacade {
   public void clear() {
     MDC.clear();
   }
+
+  public String get(String key) {
+    return MDC.get(key);
+  }
 }
