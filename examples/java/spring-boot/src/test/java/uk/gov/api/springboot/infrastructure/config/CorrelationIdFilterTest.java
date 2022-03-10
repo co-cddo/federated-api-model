@@ -41,13 +41,16 @@ class CorrelationIdFilterTest {
   }
 
   @Test
-  void correlationIdIsAddedToResponse() throws ServletException, IOException {
+  void correlationIdIsAddedToResponseBeforeFilter() throws ServletException, IOException {
     String correlationId = UUID.randomUUID().toString();
     when(request.getHeader("correlation-id")).thenReturn(correlationId);
 
     filter.doFilterInternal(request, response, filterChain);
 
-    verify(response).addHeader("correlation-id", correlationId);
+    var inorder = Mockito.inOrder(response, filterChain);
+
+    inorder.verify(response).addHeader("correlation-id", correlationId);
+    inorder.verify(filterChain).doFilter(any(), any());
   }
 
   @Test
