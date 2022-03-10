@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -20,6 +21,7 @@ import uk.gov.api.springboot.infrastructure.mappers.V1AlphaMapper;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.BulkMetadataResponse;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.ErrorResponse;
 
+@Component
 public class V1AlphaFetcher implements Fetcher {
   private static final Logger LOGGER = LoggerFactory.getLogger(V1AlphaFetcher.class);
   private static final String CORRELATION_ID_HEADER = "correlation-id";
