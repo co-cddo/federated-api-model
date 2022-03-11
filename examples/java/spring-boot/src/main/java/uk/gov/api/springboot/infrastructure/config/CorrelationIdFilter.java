@@ -47,9 +47,9 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
     try {
       mdcFacade.put(MdcFacade.CORRELATION_ID, correlationId);
       LOGGER.info("A request was sent with correlation-id {}", correlationId);
+      response.addHeader(CORRELATION_ID_HEADER, correlationId);
       filterChain.doFilter(request, response);
     } finally {
-      response.addHeader(CORRELATION_ID_HEADER, correlationId);
       mdcFacade.clear();
     }
   }
