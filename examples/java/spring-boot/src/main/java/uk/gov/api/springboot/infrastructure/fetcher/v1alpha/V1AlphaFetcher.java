@@ -1,6 +1,8 @@
 package uk.gov.api.springboot.infrastructure.fetcher.v1alpha;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -20,6 +23,7 @@ import uk.gov.api.springboot.infrastructure.mappers.V1AlphaMapper;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.BulkMetadataResponse;
 import uk.gov.api.springboot.infrastructure.models.metadata.v1alpha.ErrorResponse;
 
+@Component
 public class V1AlphaFetcher implements Fetcher {
   private static final Logger LOGGER = LoggerFactory.getLogger(V1AlphaFetcher.class);
   private static final String CORRELATION_ID_HEADER = "correlation-id";
@@ -37,7 +41,7 @@ public class V1AlphaFetcher implements Fetcher {
   @Override
   public List<Api> fetch(String baseUrl) {
     String url = baseUrl + "/apis";
-    String correlationId = mdc.get(MdcFacade.CORRELATION_ID);
+    String correlationId = getOrGenerateCorrelationId();
     mdc.put("request.v1alpha.correlation-id", correlationId);
 
     ResponseEntity<BulkMetadataResponse> entity =
@@ -73,6 +77,16 @@ public class V1AlphaFetcher implements Fetcher {
     var apis = body.getApis().stream().map(mapper::from).toList();
     LOGGER.info("Successfully retrieved {} APIs from {}", apis.size(), url);
     return apis;
+  }
+
+  private String getOrGenerateCorrelationId() {
+    Optional<String> existingCorrelationId = Optional.ofNullable(mdc.get(MdcFacade.CORRELATION_ID));
+    return existingCorrelationId.orElseGet(
+        () -> {
+          String correlationId = UUID.randomUUID().toString();
+          mdc.put(CORRELATION_ID_HEADER, correlationId);
+          return correlationId;
+        });
   }
 
   private static Function<Throwable, Throwable> handleError(String url) {

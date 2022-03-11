@@ -192,6 +192,15 @@ class V1AlphaFetcherIntegrationTest {
       }
 
       @Test
+      void itGeneratesCorrelationIdIfNotPresentInMdc() {
+        server.enqueue(success());
+
+        fetch();
+
+        verify(mdc, atLeast(1)).put(eq("correlation-id"), matches(Patterns.UUID_V4));
+      }
+
+      @Test
       void itAddsResponseCorrelationIdToMdc() {
         server.enqueue(success());
 
