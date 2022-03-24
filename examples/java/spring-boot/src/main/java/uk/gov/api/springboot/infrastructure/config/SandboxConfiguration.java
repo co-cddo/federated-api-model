@@ -25,7 +25,7 @@ public class SandboxConfiguration {
             "A sample deployment of the Federated API Model's reference implementation",
             "https://federated-api-model-spring-boot-sandbox.london.cloudapps.digital",
             "api-programme@digital.cabinet-office.gov.uk",
-            "CDDO",
+            "Central Digital and Data Office",
             "https://github.com/co-cddo/federated-api-model"));
   }
 }
