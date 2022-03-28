@@ -26,7 +26,7 @@ dependencies {
   testImplementation 'org.awaitility:awaitility:4.2.0'
   testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.8.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'io.rest-assured:json-schema-validator:4.5.1'
+  testImplementation 'io.rest-assured:json-schema-validator:5.0.0'
 }
 
 task copySchemas(type: Copy) {
