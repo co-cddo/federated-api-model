@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/alphagov/federated-api-model#readme",
   "devDependencies": {
-    "@stoplight/spectral-cli": "^6.4.0",
+    "@stoplight/spectral-cli": "^6.4.1",
     "ajv-cli": "^5.0.0",
     "ajv-formats": "^2.1.1",
     "@govuk-data-standards/spectral-ruleset-govuk-public": "^0.2.0"
