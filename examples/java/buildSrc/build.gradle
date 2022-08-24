@@ -2,7 +2,7 @@ buildscript { repositories { mavenCentral() }}
 
 plugins {
   id 'groovy-gradle-plugin'
-  id 'com.diffplug.spotless' version '6.9.1'
+  id 'com.diffplug.spotless' version '6.10.0'
 }
 
 repositories {
