@@ -25,7 +25,7 @@ ext {
 }
 
 dependencies {
-  implementation 'com.diffplug.spotless:spotless-plugin-gradle:6.10.0'
+  implementation 'com.diffplug.spotless:spotless-plugin-gradle:6.11.0'
   implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
   implementation "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
 }
