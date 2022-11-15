@@ -22,7 +22,7 @@ dependencies {
   testImplementation 'com.github.valfirst:slf4j-test:2.6.1'
   testImplementation 'com.squareup.okhttp3:okhttp:4.10.0'
   testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
-  testImplementation 'com.tngtech.archunit:archunit-junit5:0.23.1'
+  testImplementation 'com.tngtech.archunit:archunit-junit5:1.0.0'
   testImplementation 'org.awaitility:awaitility:4.2.0'
   testImplementation 'org.jmolecules.integrations:jmolecules-archunit:0.10.0'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
