@@ -6,6 +6,7 @@ on:
       - '.github/workflows/openapi-docs-pr.yml'
       - 'schemas/.spectral.yml'
       - "schemas/*/openapi.yml"
+      - "schemas/package.json"
 
 permissions:
   contents: read
